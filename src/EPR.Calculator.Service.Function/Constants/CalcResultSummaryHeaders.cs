@@ -106,16 +106,16 @@ namespace EPR.Calculator.Service.Function.Constants
         public static readonly string FeeforCommsCostsbyMaterialwithBadDebtprovision2A =
             "2a Fee for Comms Costs - by Material with Bad Debt provision";
 
-        // Percentage of Producer Reported Tonnage vs All Producers
-        public static readonly string PercentageofProducerReportedTonnagevsAllProducers = "Percentage of Producer Reported Tonnage vs All Producers";
+        // Percentage of Producer Tonnage vs All Producers
+        public static readonly string PercentageofProducerTonnagevsAllProducers = "Percentage of Producer Tonnage vs All Producers";
 
         // 2b comms total
         public static readonly string CommsCostHeaderWithoutBadDebtFor2bTitle = "2b Comms Costs - UK wide w/o Bad Debt provision";
         public static readonly string CommsCostHeaderWithBadDebtFor2bTitle = "2b Comms Costs - UK wide with Bad Debt provision";
         public static readonly string CommsCostHeaderBadDebtProvisionFor2bTitle = "Bad Debt provision";
-        public static readonly string ProducerFeeWithoutBadDebtForComms2b = "2b Total Producer Fee for Comms Costs - UK wide In proportion to Producer Reported Tonnage w/o Bad Debt provision";
+        public static readonly string ProducerFeeWithoutBadDebtForComms2b = "2b Total Producer Fee for Comms Costs - UK wide In proportion to Producer Tonnage w/o Bad Debt provision";
         public static readonly string BadDebtProvisionForComms2b = "Bad Debt Provision for 2b";
-        public static readonly string ProducerFeeForCommsCostsWithBadDebtForComms2b = "2b Total Producer Fee for Comms Costs - UK wide In proportion to Producer Reported Tonnage with Bad Debt provision";
+        public static readonly string ProducerFeeForCommsCostsWithBadDebtForComms2b = "2b Total Producer Fee for Comms Costs - UK wide In proportion to Producer Tonnage with Bad Debt provision";
         public static readonly string EnglandTotalWithBadDebtProvisionForComms2b = "England Total with Bad Debt provision";
         public static readonly string WalesTotalWithBadDebtProvisionForComms2b = "Wales Total with Bad Debt provision";
         public static readonly string ScotlandTotalWithBadDebtProvisionForComms2b = "Scotland Total with Bad Debt provision";
