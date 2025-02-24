@@ -284,7 +284,7 @@
         {
             // Act
             var result = OnePlus2A2B2CProducer.GetHeaders().ToList();
-            var columnIndex = 242;
+            var columnIndex = 243;
 
             var expectedResult = new List<CalcResultSummaryHeader>();
             expectedResult.AddRange([
@@ -307,7 +307,7 @@
 
             var expectedResult = new List<CalcResultSummaryHeader>();
             expectedResult.AddRange([
-                new CalcResultSummaryHeader { Name = OnePlus2A2B2CHeaders.TotalWithBadDebtProvision, ColumnIndex = 242 },
+                new CalcResultSummaryHeader { Name = OnePlus2A2B2CHeaders.TotalWithBadDebtProvision, ColumnIndex = 243 },
             ]);
 
             // Assert

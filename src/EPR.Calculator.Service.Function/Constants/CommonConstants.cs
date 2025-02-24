@@ -10,11 +10,11 @@
         public const string Total = "Total";
         public const string Totals = "Totals";
         public const string Comma = ",";
-        public const string ProducerReportedHouseholdPackagingWasteTonnage = "Producer Reported Household Packaging Waste Tonnage";
-        public const string ReportedPublicBinTonnage = "Reported Public Bin Tonnage";
-        public const string HouseholdDrinkContainers = "Household Drinks Containers";
+        public const string ProducerReportedHouseholdPackagingWasteTonnage = "Producer Household Packaging Waste Tonnage";
+        public const string ReportedPublicBinTonnage = "Public Bin Tonnage";
+        public const string HouseholdDrinkContainers = "Household Drinks Containers Tonnage";
         public const string LateReportingTonnage = "Late Reporting Tonnage";
-        public const string ProducerReportedTotalTonnage = "Producer Reported Household Packaging Waste Tonnage + Late Reporting Tonnage + Reported Public Bin Tonnage + Household Drinks Containers";
+        public const string ProducerReportedTotalTonnage = "Producer Household Tonnage + Late Reporting Tonnage + Public Bin Tonnage + Household Drinks Containers Tonnage";
         public const string DisposalCostPricePerTonne = "Disposal Cost Price Per Tonne";
         public const string LADisposalCostData = "LA Disposal Cost Data";
         public const string PolicyName = "AllowAllOrigins";
@@ -22,5 +22,7 @@
         public const int LevelOne = 1;
         public const int LevelTwo = 2;
         public const int SecondaryHeaderMaxColumnSize = 270;
+        public const string ScaledupProducersYes = "Yes";
+        public const string ScaledupProducersNo = "No";
     }
 }

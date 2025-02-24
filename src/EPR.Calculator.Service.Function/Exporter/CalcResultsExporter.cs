@@ -333,7 +333,7 @@
                         csvContent.Append($"{CsvSanitiser.SanitiseData(producer.SubsidiaryId)},");
                         csvContent.Append($"{CsvSanitiser.SanitiseData(producer.ProducerName)},");
                         csvContent.Append($"{CsvSanitiser.SanitiseData(producer.Level)},");
-                        csvContent.Append($"{CsvSanitiser.SanitiseData(producer.SubmissonPeriodCode)},");
+                        csvContent.Append($"{CsvSanitiser.SanitiseData(producer.SubmissionPeriodCode)},");
                         csvContent.Append($"{CsvSanitiser.SanitiseData(producer.DaysInSubmissionPeriod != -1 ? producer.DaysInSubmissionPeriod.ToString() : string.Empty)},");
                         csvContent.Append($"{CsvSanitiser.SanitiseData(producer.DaysInWholePeriod != -1 ? producer.DaysInWholePeriod.ToString() : string.Empty)},");
                         csvContent.Append($"{CsvSanitiser.SanitiseData(producer.ScaleupFactor == -1 ? CommonConstants.Totals : producer.ScaleupFactor.ToString())},");
@@ -341,31 +341,28 @@
 
                     foreach (var producerTonnage in producer.ScaledupProducerTonnageByMaterial)
                     {
-                        var materialCode = producerTonnage.Key;
-                        var tonnage = producerTonnage.Value;
+                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producerTonnage.Value.ReportedHouseholdPackagingWasteTonnage, DecimalPoint).ToString(DecimalFormat))},");
+                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producerTonnage.Value.ReportedPublicBinTonnage, DecimalPoint).ToString(DecimalFormat))},");
 
-                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(tonnage.ReportedHouseholdPackagingWasteTonnage, 3).ToString("F3"))},");
-                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(tonnage.ReportedPublicBinTonnage, 3).ToString("F3"))},");
-
-                        if (materialCode == MaterialCodes.Glass || materialCode == MaterialNames.Glass)
+                        if (producerTonnage.Key == MaterialCodes.Glass || producerTonnage.Key == MaterialNames.Glass)
                         {
-                            csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(tonnage.HouseholdDrinksContainersTonnageGlass, DecimalPoint).ToString(DecimalFormat))},");
+                            csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producerTonnage.Value.HouseholdDrinksContainersTonnageGlass, DecimalPoint).ToString(DecimalFormat))},");
                         }
 
-                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(tonnage.TotalReportedTonnage, 3).ToString("F3"))},");
-                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(tonnage.ReportedSelfManagedConsumerWasteTonnage, 3).ToString("F3"))},");
-                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(tonnage.NetReportedTonnage, 3).ToString("F3"))},");
-                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(tonnage.ScaledupReportedHouseholdPackagingWasteTonnage, 3).ToString("F3"))},");
-                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(tonnage.ScaledupReportedPublicBinTonnage, 3).ToString("F3"))},");
+                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producerTonnage.Value.TotalReportedTonnage, DecimalPoint).ToString(DecimalFormat))},");
+                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producerTonnage.Value.ReportedSelfManagedConsumerWasteTonnage, DecimalPoint).ToString(DecimalFormat))},");
+                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producerTonnage.Value.NetReportedTonnage, DecimalPoint).ToString(DecimalFormat))},");
+                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producerTonnage.Value.ScaledupReportedHouseholdPackagingWasteTonnage, DecimalPoint).ToString(DecimalFormat))},");
+                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producerTonnage.Value.ScaledupReportedPublicBinTonnage, DecimalPoint).ToString(DecimalFormat))},");
 
-                        if (materialCode == MaterialCodes.Glass || materialCode == MaterialNames.Glass)
+                        if (producerTonnage.Key == MaterialCodes.Glass || producerTonnage.Key == MaterialNames.Glass)
                         {
-                            csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(tonnage.ScaledupHouseholdDrinksContainersTonnageGlass, DecimalPoint).ToString(DecimalFormat))},");
+                            csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producerTonnage.Value.ScaledupHouseholdDrinksContainersTonnageGlass, DecimalPoint).ToString(DecimalFormat))},");
                         }
 
-                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(tonnage.ScaledupTotalReportedTonnage, 3).ToString("F3"))},");
-                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(tonnage.ScaledupReportedSelfManagedConsumerWasteTonnage, 3).ToString("F3"))},");
-                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(tonnage.ScaledupNetReportedTonnage, 3).ToString("F3"))},");
+                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producerTonnage.Value.ScaledupTotalReportedTonnage, DecimalPoint).ToString(DecimalFormat))},");
+                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producerTonnage.Value.ScaledupReportedSelfManagedConsumerWasteTonnage, DecimalPoint).ToString(DecimalFormat))},");
+                        csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producerTonnage.Value.ScaledupNetReportedTonnage, DecimalPoint).ToString(DecimalFormat))},");
                     }
 
                     csvContent.AppendLine();
@@ -403,7 +400,7 @@
                 }
             }
 
-            var headerRow = string.Join(",", headerRows);
+            var headerRow = string.Join(CommonConstants.Comma, headerRows);
             csvContent.AppendLine(headerRow);
         }
 
@@ -431,6 +428,7 @@
                 csvContent.Append($"{CsvSanitiser.SanitiseData(producer.SubsidiaryId)},");
                 csvContent.Append($"{CsvSanitiser.SanitiseData(producer.ProducerName)},");
                 csvContent.Append($"{CsvSanitiser.SanitiseData(producer.Level)},");
+                csvContent.Append($"{CsvSanitiser.SanitiseData(producer.isProducerScaledup)},");
 
                 foreach (var disposalFee in producer.ProducerDisposalFeesByMaterial)
                 {
@@ -445,7 +443,7 @@
                     csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.TotalReportedTonnage, DecimalPoint).ToString(DecimalFormat))},");
                     csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.ManagedConsumerWasteTonnage, DecimalPoint).ToString(DecimalFormat))},");
                     csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.NetReportedTonnage, DecimalPoint).ToString(DecimalFormat))},");
-                    csvContent.Append(producer.Level != "Totals" ? $"£{CsvSanitiser.SanitiseData(disposalFee.Value.PricePerTonne)}," : ",");
+                    csvContent.Append(producer.isProducerScaledup != CommonConstants.Totals ? $"£{CsvSanitiser.SanitiseData(disposalFee.Value.PricePerTonne)}," : ",");
                     csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.ProducerDisposalFee, DecimalRoundUp))},");
                     csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.BadDebtProvision, DecimalRoundUp))},");
                     csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.ProducerDisposalFeeWithBadDebtProvision, DecimalRoundUp))},");
@@ -473,11 +471,11 @@
                     }
 
                     csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.TotalReportedTonnage, DecimalPoint).ToString(DecimalFormat))},");
-                    csvContent.Append(producer.Level != "Totals" ? $"£{CsvSanitiser.SanitiseData(disposalFee.Value.PriceperTonne)}," : ",");
+                    csvContent.Append(producer.isProducerScaledup != CommonConstants.Totals ? $"£{CsvSanitiser.SanitiseData(disposalFee.Value.PriceperTonne)}," : ",");
                     csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.ProducerTotalCostWithoutBadDebtProvision, DecimalRoundUp))},");
                     csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.BadDebtProvision, DecimalRoundUp))},");
                     csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.ProducerTotalCostwithBadDebtProvision, DecimalRoundUp))},");
-                    csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.EnglandWithBadDebtProvision, DecimalRoundUp).ToString("F2"))},");
+                    csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.EnglandWithBadDebtProvision, DecimalRoundUp))},");
                     csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.WalesWithBadDebtProvision, DecimalRoundUp))},");
                     csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.ScotlandWithBadDebtProvision, DecimalRoundUp))},");
                     csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(disposalFee.Value.NorthernIrelandWithBadDebtProvision, DecimalRoundUp))},");
@@ -508,7 +506,7 @@
                 csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(producer.ScotlandTotalWithBadDebtProvision2A, DecimalRoundUp))},");
                 csvContent.Append($"£{CsvSanitiser.SanitiseData(Math.Round(producer.NorthernIrelandTotalWithBadDebtProvision2A, DecimalRoundUp))},");
 
-                // Percentage of Producer Reported Tonnage vs All Producers
+                // Percentage of Producer Tonnage vs All Producers
                 csvContent.Append($"{CsvSanitiser.SanitiseData(Math.Round(producer.PercentageofProducerReportedTonnagevsAllProducers, 8))}%,");
 
                 // 2b comms Total
@@ -576,7 +574,12 @@
         private static void PrepareSummaryDataHeader(CalcResultSummary resultSummary, StringBuilder csvContent)
         {
             // Add result summary header
-            csvContent.AppendLine(CsvSanitiser.SanitiseData(resultSummary.ResultSummaryHeader?.Name));
+            csvContent.AppendLine(CsvSanitiser.SanitiseData(resultSummary.ResultSummaryHeader?.Name))
+                .AppendLine()
+                .AppendLine();
+
+            // Add notes header
+            csvContent.AppendLine(CsvSanitiser.SanitiseData(resultSummary.NotesHeader?.Name));
 
             // Add producer disposal fees header
             WriteSecondaryHeaders(csvContent, resultSummary.ProducerDisposalFeesHeaders);

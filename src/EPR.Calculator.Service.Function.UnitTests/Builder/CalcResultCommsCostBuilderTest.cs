@@ -9,6 +9,7 @@ using EPR.Calculator.Service.Function.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace EPR.Calculator.Service.Function.UnitTests.Builder
 {
@@ -41,20 +42,23 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
         [TestMethod]
         public void ConstructTest()
         {
-            CreateMaterials();
-            CreateDefaultTemplate();
-            CreateDefaultParameters();
-            CreateNewRun();
-            CreateProducerDetail();
+            var calcResult = TestDataHelper.GetCalcResult();
+            calcResult.CalcResultScaledupProducers = GetScaledUpProducers();
+
+            this.CreateMaterials();
+            this.CreateDefaultTemplate();
+            this.CreateDefaultParameters();
+            this.CreateNewRun();
+            this.CreateProducerDetail();
             var resultsRequestDto = new CalcResultsRequestDto { RunId = 1 };
             var apportionment = new CalcResultOnePlusFourApportionment
             {
-                Name = Fixture.Create<string>(),
+                Name = this.Fixture.Create<string>(),
                 CalcResultOnePlusFourApportionmentDetails = new List<CalcResultOnePlusFourApportionmentDetail>
                 {
                     new CalcResultOnePlusFourApportionmentDetail
                     {
-                        Name = Fixture.Create<string>(),
+                        Name = this.Fixture.Create<string>(),
                         EnglandTotal = 40M,
                         ScotlandTotal = 20M,
                         WalesTotal = 20M,
@@ -63,11 +67,11 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandDisposalTotal = "40%",
                         ScotlandDisposalTotal = "20%",
                         WalesDisposalTotal = "20%",
-                        NorthernIrelandDisposalTotal = "20%"
-                    }
-                }
+                        NorthernIrelandDisposalTotal = "20%",
+                    },
+                },
             };
-            var results = builder.Construct(resultsRequestDto, apportionment);
+            var results = this.builder.Construct(resultsRequestDto, apportionment, calcResult);
             results.Wait();
             var result = results.Result;
 
@@ -98,7 +102,6 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
             Assert.AreEqual("20%", dataApp.Scotland);
             Assert.AreEqual("100%", dataApp.Total);
 
-
             var materialCosts = result.CalcResultCommsCostCommsCostByMaterial.ToList();
             Assert.IsNotNull(materialCosts);
             Assert.AreEqual(10, materialCosts.Count);
@@ -113,14 +116,17 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
             Assert.AreEqual("Scotland", materialHeader.Scotland);
             Assert.AreEqual("Northern Ireland", materialHeader.NorthernIreland);
             Assert.AreEqual("Total", materialHeader.Total);
-            Assert.AreEqual("Producer Reported Household Packaging Waste Tonnage",
+            Assert.AreEqual(
+                "Producer Household Packaging Waste Tonnage",
                 materialHeader.ProducerReportedHouseholdPackagingWasteTonnage);
-            Assert.AreEqual("Reported Public Bin Tonnage", materialHeader.ReportedPublicBinTonnage);
-            Assert.AreEqual("Household Drinks Containers", materialHeader.HouseholdDrinksContainers);
+            Assert.AreEqual("Public Bin Tonnage", materialHeader.ReportedPublicBinTonnage);
+            Assert.AreEqual("Household Drinks Containers Tonnage", materialHeader.HouseholdDrinksContainers);
             Assert.AreEqual("Late Reporting Tonnage", materialHeader.LateReportingTonnage);
-            Assert.AreEqual("Producer Reported Household Packaging Waste Tonnage + Late Reporting Tonnage + Report Public Bin Tonnage + Household Drinks Containers",
+            Assert.AreEqual(
+                "Producer Household Tonnage + Late Reporting Tonnage + Public Bin Tonnage + Household Drinks Containers Tonnage",
                 materialHeader.ProducerReportedHouseholdPlusLateReportingTonnage);
-            Assert.AreEqual("Comms Cost - by Material Price Per Tonne",
+            Assert.AreEqual(
+                "Comms Cost - by Material Price Per Tonne",
                 materialHeader.CommsCostByMaterialPricePerTonne);
 
             var aluminiumCost = materialCosts[1];
@@ -130,14 +136,16 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
             Assert.AreEqual("£2.00", aluminiumCost.Scotland);
             Assert.AreEqual("£2.00", aluminiumCost.NorthernIreland);
             Assert.AreEqual("£10.00", aluminiumCost.Total);
-            Assert.AreEqual("1000.000",
+            Assert.AreEqual(
+                "910.000",
                 aluminiumCost.ProducerReportedHouseholdPackagingWasteTonnage);
             Assert.AreEqual("10.000", aluminiumCost.LateReportingTonnage);
-            Assert.AreEqual("1010.000",
+            Assert.AreEqual(
+                "930.000",
                 aluminiumCost.ProducerReportedHouseholdPlusLateReportingTonnage);
-            Assert.AreEqual("0.0099",
+            Assert.AreEqual(
+                "0.0108",
                 aluminiumCost.CommsCostByMaterialPricePerTonne);
-
 
             var fibreCompositeCost = materialCosts[2];
             Assert.AreEqual("Fibre composite", fibreCompositeCost.Name);
@@ -146,13 +154,35 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
             Assert.AreEqual("£2.00", fibreCompositeCost.Scotland);
             Assert.AreEqual("£2.00", fibreCompositeCost.NorthernIreland);
             Assert.AreEqual("£10.00", fibreCompositeCost.Total);
-            Assert.AreEqual("2000.000",
+            Assert.AreEqual(
+                "1800.000",
                 fibreCompositeCost.ProducerReportedHouseholdPackagingWasteTonnage);
             Assert.AreEqual("10.000", fibreCompositeCost.LateReportingTonnage);
-            Assert.AreEqual("2010.000",
+            Assert.AreEqual(
+                "1810.000",
                 fibreCompositeCost.ProducerReportedHouseholdPlusLateReportingTonnage);
-            Assert.AreEqual("0.0050",
+            Assert.AreEqual(
+                "0.0055",
                 fibreCompositeCost.CommsCostByMaterialPricePerTonne);
+
+            var glassCost = materialCosts[3];
+            Assert.AreEqual("Glass", glassCost.Name);
+            Assert.AreEqual("£4.00", glassCost.England);
+            Assert.AreEqual("£2.00", glassCost.Wales);
+            Assert.AreEqual("£2.00", glassCost.Scotland);
+            Assert.AreEqual("£2.00", glassCost.NorthernIreland);
+            Assert.AreEqual("£10.00", glassCost.Total);
+            Assert.AreEqual(
+                "2700.000",
+                glassCost.ProducerReportedHouseholdPackagingWasteTonnage);
+            Assert.AreEqual("10.000", glassCost.LateReportingTonnage);
+            Assert.AreEqual(
+                "2810.000",
+                glassCost.ProducerReportedHouseholdPlusLateReportingTonnage);
+            Assert.AreEqual(
+                "0.0036",
+                glassCost.CommsCostByMaterialPricePerTonne);
+            Assert.AreEqual("100.0000", glassCost.HouseholdDrinksContainers);
 
             var totalMaterialCost = materialCosts.Last();
             Assert.AreEqual("Total", totalMaterialCost.Name);
@@ -161,10 +191,12 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
             Assert.AreEqual("£16.00", totalMaterialCost.Scotland);
             Assert.AreEqual("£16.00", totalMaterialCost.NorthernIreland);
             Assert.AreEqual("£80.00", totalMaterialCost.Total);
-            Assert.AreEqual("36000.000",
+            Assert.AreEqual(
+                "32410.000",
                 totalMaterialCost.ProducerReportedHouseholdPackagingWasteTonnage);
             Assert.AreEqual("80.000", totalMaterialCost.LateReportingTonnage);
-            Assert.AreEqual("36080.000",
+            Assert.AreEqual(
+                "32600.000",
                 totalMaterialCost.ProducerReportedHouseholdPlusLateReportingTonnage);
             Assert.IsTrue(string.IsNullOrEmpty(totalMaterialCost.CommsCostByMaterialPricePerTonne));
         }
@@ -262,10 +294,35 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         MaterialId = materialId,
                         ProducerDetailId = producerDetailId,
                         PackagingType = "HH",
-                        PackagingTonnage = (materialId * 100)
+                        PackagingTonnage = materialId * 100,
                     });
                 }
             }
+
+            this.dbContext.ProducerReportedMaterial.Add(new ProducerReportedMaterial()
+            {
+                MaterialId = 3,
+                ProducerDetailId = 1,
+                PackagingType = "HDC",
+                PackagingTonnage = 100,
+            });
+
+            this.dbContext.ProducerReportedMaterial.Add(new ProducerReportedMaterial()
+            {
+                MaterialId = 3,
+                ProducerDetailId = 2,
+                PackagingType = "HDC",
+                PackagingTonnage = 100,
+            });
+
+            this.dbContext.ProducerReportedMaterial.Add(new ProducerReportedMaterial()
+            {
+                MaterialId = 2,
+                ProducerDetailId = 1,
+                PackagingType = "PB",
+                PackagingTonnage = 200
+            });
+
             dbContext.SaveChanges();
         }
 
@@ -385,6 +442,58 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
             }
 
             return 10;
+        }
+
+        private static CalcResultScaledupProducers GetScaledUpProducers()
+        {
+           return new CalcResultScaledupProducers()
+            {
+                ScaledupProducers = new List<CalcResultScaledupProducer>()
+                 {
+                     new CalcResultScaledupProducer()
+                     {
+                        ProducerId = 1,
+                        IsTotalRow = true,
+                        ScaledupProducerTonnageByMaterial = new ()
+                        {
+                         ["Aluminium"] = new CalcResultScaledupProducerTonnage
+                        {
+                            ReportedHouseholdPackagingWasteTonnage = 10,
+                            ReportedPublicBinTonnage = 10,
+                            TotalReportedTonnage = 10,
+                            ReportedSelfManagedConsumerWasteTonnage = 10,
+                            NetReportedTonnage = 10,
+                            ScaledupReportedHouseholdPackagingWasteTonnage = 10,
+                            ScaledupReportedPublicBinTonnage = 10,
+                            ScaledupTotalReportedTonnage = 10,
+                            ScaledupReportedSelfManagedConsumerWasteTonnage = 10,
+                            ScaledupNetReportedTonnage = 10,
+                        },
+                        },
+                     },
+                     new CalcResultScaledupProducer()
+                     {
+                        ProducerId = 1,
+                        IsTotalRow = true,
+                        ScaledupProducerTonnageByMaterial = new ()
+                        {
+                         ["GL"] = new CalcResultScaledupProducerTonnage
+                        {
+                            ReportedHouseholdPackagingWasteTonnage = 10,
+                            ReportedPublicBinTonnage = 10,
+                            TotalReportedTonnage = 10,
+                            ReportedSelfManagedConsumerWasteTonnage = 10,
+                            NetReportedTonnage = 10,
+                            ScaledupReportedHouseholdPackagingWasteTonnage = 10,
+                            ScaledupReportedPublicBinTonnage = 10,
+                            ScaledupTotalReportedTonnage = 10,
+                            ScaledupReportedSelfManagedConsumerWasteTonnage = 10,
+                            ScaledupNetReportedTonnage = 10,
+                        },
+                        },
+                     },
+                 },
+            };
         }
 
         private void CreateMaterials()

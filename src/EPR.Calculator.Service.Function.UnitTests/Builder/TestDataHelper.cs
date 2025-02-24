@@ -14,7 +14,6 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 CalcResultDetail = GetCalcResultDetail(),
                 CalcResultLapcapData = GetCalcResultLapcapData(),
                 CalcResultLateReportingTonnageData = GetCalcResultLateReportingTonnage(),
-
             };
         }
 
@@ -23,7 +22,8 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
             return new CalcResultParameterOtherCost
             {
                 Name = "Parameters - Other",
-                SaOperatingCost = new List<CalcResultParameterOtherCostDetail> {
+                SaOperatingCost = new List<CalcResultParameterOtherCostDetail>
+                {
                     new CalcResultParameterOtherCostDetail
                     {
                         Name = null,
@@ -37,9 +37,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandValue = 0,
                         NorthernIrelandValue = 0,
                         TotalValue = 0,
-                        OrderId = 0
+                        OrderId = 0,
                     },
-                    new CalcResultParameterOtherCostDetail {
+                    new CalcResultParameterOtherCostDetail
+                    {
                         Name = "3 SA Operating Costs",
                         England = "£25,000.00",
                         Wales = "£14,000.00",
@@ -51,11 +52,13 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandValue = 17000,
                         NorthernIrelandValue = 9000,
                         TotalValue = 65000,
-                        OrderId = 2
-                    }
+                        OrderId = 2,
+                    },
                 },
-                Details = new List<CalcResultParameterOtherCostDetail> {
-                    new CalcResultParameterOtherCostDetail {
+                Details = new List<CalcResultParameterOtherCostDetail>
+                {
+                    new CalcResultParameterOtherCostDetail
+                    {
                         Name = "4 LA Data Prep Charge",
                         England = "£16,000.00",
                         Wales = "£7,000.00",
@@ -67,9 +70,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandValue = 9000,
                         NorthernIrelandValue = 4500,
                         TotalValue = 36500,
-                        OrderId = 1
+                        OrderId = 1,
                     },
-                    new CalcResultParameterOtherCostDetail {
+                    new CalcResultParameterOtherCostDetail
+                    {
                         Name = "4 Country Apportionment %s",
                         England = "43.83561644%",
                         Wales = "19.17808219%",
@@ -81,10 +85,11 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandValue = 24.65753424657534m,
                         NorthernIrelandValue = 12.32876712328767m,
                         TotalValue = 100,
-                        OrderId = 2
-                    }
+                        OrderId = 2,
+                    },
                 },
-                SchemeSetupCost = {
+                SchemeSetupCost =
+                {
                     Name = "5 Scheme set up cost Yearly Cost",
                     England = "£17,500.00",
                     Wales = "£23,400.00",
@@ -96,54 +101,61 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                     ScotlandValue = 12400,
                     NorthernIrelandValue = 9450,
                     TotalValue = 62750,
-                    OrderId = 1
+                    OrderId = 1,
                 },
                 BadDebtProvision = new KeyValuePair<string, string>("6 Bad Debt Provision", "6.00%"),
-                Materiality = new List<CalcResultMateriality> {
-                    new CalcResultMateriality {
+                Materiality = new List<CalcResultMateriality>
+                {
+                    new CalcResultMateriality
+                    {
                         SevenMateriality = "7 Materiality",
                         Amount = "Amount £s",
                         Percentage = "%",
                         AmountValue = 0,
-                        PercentageValue = 0
+                        PercentageValue = 0,
                     },
-                    new CalcResultMateriality {
+                    new CalcResultMateriality
+                    {
                         SevenMateriality = "Increase",
                         Amount = "£5,000.00",
                         Percentage = "2.00%",
                         AmountValue = 5000,
-                        PercentageValue = 2
+                        PercentageValue = 2,
                     },
-                    new CalcResultMateriality {
+                    new CalcResultMateriality
+                    {
                         SevenMateriality = "Decrease",
                         Amount = "-£1,000.00",
                         Percentage = "-1.00%",
                         AmountValue = -1000,
-                        PercentageValue = -1
+                        PercentageValue = -1,
                     },
-                    new CalcResultMateriality {
+                    new CalcResultMateriality
+                    {
                         SevenMateriality = "8 Tonnage Change",
                         Amount = "Amount £s",
                         Percentage = "%",
                         AmountValue = 0,
-                        PercentageValue = 0
+                        PercentageValue = 0,
                     },
-                    new CalcResultMateriality {
+                    new CalcResultMateriality
+                    {
                         SevenMateriality = "Increase",
                         Amount = "£50.00",
                         Percentage = "2.00%",
                         AmountValue = 50,
-                        PercentageValue = 2
+                        PercentageValue = 2,
                     },
-                    new CalcResultMateriality {
+                    new CalcResultMateriality
+                    {
                         SevenMateriality = "Decrease",
                         Amount = "-£10.00",
                         Percentage = "-0.50%",
                         AmountValue = -10,
-                        PercentageValue = -0.5m
-                    }
+                        PercentageValue = -0.5m,
+                    },
                 },
-                BadDebtValue = 6
+                BadDebtValue = 6,
             };
         }
 
@@ -159,7 +171,8 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 Name = "Disposal Cost Data",
                 CalcResultLaDisposalCostDetails = new List<CalcResultLaDisposalCostDataDetail>()
                 {
-                    new CalcResultLaDisposalCostDataDetail() {
+                    new CalcResultLaDisposalCostDataDetail()
+                    {
                         Name = "Material",
                         Material = null,
                         England = "England",
@@ -172,9 +185,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         LateReportingTonnage = "Late Reporting Tonnage",
                         ProducerReportedTotalTonnage = "Producer Reported Household Tonnage + Late Reporting Tonnage",
                         DisposalCostPricePerTonne = "Disposal Cost Price Per Tonne",
-                        OrderId = 1
+                        OrderId = 1,
                     },
-                    new CalcResultLaDisposalCostDataDetail() {
+                    new CalcResultLaDisposalCostDataDetail()
+                    {
                         Name = "Aluminium",
                         Material = null,
                         England = "£5,000.00",
@@ -187,9 +201,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         LateReportingTonnage = "8000.000",
                         ProducerReportedTotalTonnage = "14980.000",
                         DisposalCostPricePerTonne = "£0.6676",
-                        OrderId = 2
+                        OrderId = 2,
                     },
-                    new CalcResultLaDisposalCostDataDetail() {
+                    new CalcResultLaDisposalCostDataDetail()
+                    {
                         Name = "Fibre composite",
                         Material = null,
                         England = "£7,500.00",
@@ -202,9 +217,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         LateReportingTonnage = "7000.000",
                         ProducerReportedTotalTonnage = "18850.000",
                         DisposalCostPricePerTonne = "£0.7825",
-                        OrderId = 3
+                        OrderId = 3,
                     },
-                    new CalcResultLaDisposalCostDataDetail() {
+                    new CalcResultLaDisposalCostDataDetail()
+                    {
                         Name = "Glass",
                         Material = null,
                         England = "£45,000.00",
@@ -217,9 +233,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         LateReportingTonnage = "6000.000",
                         ProducerReportedTotalTonnage = "10900.000",
                         DisposalCostPricePerTonne = "£6.4404",
-                        OrderId = 4
+                        OrderId = 4,
                     },
-                    new CalcResultLaDisposalCostDataDetail() {
+                    new CalcResultLaDisposalCostDataDetail()
+                    {
                         Name = "Paper or card",
                         Material = null,
                         England = "£12,500.00",
@@ -232,9 +249,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         LateReportingTonnage = "5000.000",
                         ProducerReportedTotalTonnage = "9270.000",
                         DisposalCostPricePerTonne = "£2.4488",
-                        OrderId = 5
+                        OrderId = 5,
                     },
-                    new CalcResultLaDisposalCostDataDetail() {
+                    new CalcResultLaDisposalCostDataDetail()
+                    {
                         Name = "Plastic",
                         Material = null,
                         England = "£23,000.00",
@@ -247,9 +265,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         LateReportingTonnage = "4000.000",
                         ProducerReportedTotalTonnage = "16805.000",
                         DisposalCostPricePerTonne = "£2.1601",
-                        OrderId = 6
+                        OrderId = 6,
                     },
-                    new CalcResultLaDisposalCostDataDetail() {
+                    new CalcResultLaDisposalCostDataDetail()
+                    {
                         Name = "Steel",
                         Material = null,
                         England = "£13,400.00",
@@ -262,9 +281,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         LateReportingTonnage = "3000.000",
                         ProducerReportedTotalTonnage = "10700.000",
                         DisposalCostPricePerTonne = "£1.9813",
-                        OrderId = 7
+                        OrderId = 7,
                     },
-                    new CalcResultLaDisposalCostDataDetail() {
+                    new CalcResultLaDisposalCostDataDetail()
+                    {
                         Name = "Wood",
                         Material = null,
                         England = "£0.00",
@@ -277,9 +297,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         LateReportingTonnage = "2000.000",
                         ProducerReportedTotalTonnage = "8800.000",
                         DisposalCostPricePerTonne = "£2.0000",
-                        OrderId = 8
+                        OrderId = 8,
                     },
-                    new CalcResultLaDisposalCostDataDetail() {
+                    new CalcResultLaDisposalCostDataDetail()
+                    {
                         Name = "Other materials",
                         Material = null,
                         England = "£3,400.00",
@@ -292,9 +313,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         LateReportingTonnage = "1000.000",
                         ProducerReportedTotalTonnage = "8700.000",
                         DisposalCostPricePerTonne = "£1.1954",
-                        OrderId = 9
+                        OrderId = 9,
                     },
-                    new CalcResultLaDisposalCostDataDetail() {
+                    new CalcResultLaDisposalCostDataDetail()
+                    {
                         Name = "Total",
                         Material = null,
                         England = "£109,800.00",
@@ -307,9 +329,9 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         LateReportingTonnage = "36000.000",
                         ProducerReportedTotalTonnage = "99005.000",
                         DisposalCostPricePerTonne = null,
-                        OrderId = 10
-                    }
-                }
+                        OrderId = 10,
+                    },
+                },
             };
         }
 
@@ -320,7 +342,8 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 Name = "LAPCAP Data",
                 CalcResultLapcapDataDetails = new List<CalcResultLapcapDataDetails>()
                 {
-                    new CalcResultLapcapDataDetails {
+                    new CalcResultLapcapDataDetails
+                    {
                         Name = "Material",
                         EnglandDisposalCost = "England LA Disposal Cost",
                         WalesDisposalCost = "Wales LA Disposal Cost",
@@ -332,9 +355,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandCost = 0,
                         NorthernIrelandCost = 0,
                         TotalCost = 0,
-                        OrderId = 1
+                        OrderId = 1,
                     },
-                    new CalcResultLapcapDataDetails {
+                    new CalcResultLapcapDataDetails
+                    {
                         Name = "Aluminium",
                         EnglandDisposalCost = "£5,000.00",
                         WalesDisposalCost = "£1,750.00",
@@ -346,9 +370,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandCost = 2000,
                         NorthernIrelandCost = 1250,
                         TotalCost = 10000,
-                        OrderId = 2
+                        OrderId = 2,
                     },
-                    new CalcResultLapcapDataDetails {
+                    new CalcResultLapcapDataDetails
+                    {
                         Name = "Fibre composite",
                         EnglandDisposalCost = "£7,500.00",
                         WalesDisposalCost = "£2,100.00",
@@ -360,9 +385,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandCost = 3400,
                         NorthernIrelandCost = 1750,
                         TotalCost = 14750,
-                        OrderId = 3
+                        OrderId = 3,
                     },
-                    new CalcResultLapcapDataDetails {
+                    new CalcResultLapcapDataDetails
+                    {
                         Name = "Glass",
                         EnglandDisposalCost = "£45,000.00",
                         WalesDisposalCost = "£0.00",
@@ -374,9 +400,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandCost = 20700,
                         NorthernIrelandCost = 4500,
                         TotalCost = 70200,
-                        OrderId = 4
+                        OrderId = 4,
                     },
-                    new CalcResultLapcapDataDetails {
+                    new CalcResultLapcapDataDetails
+                    {
                         Name = "Paper or card",
                         EnglandDisposalCost = "£12,500.00",
                         WalesDisposalCost = "£2,300.00",
@@ -388,9 +415,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandCost = 4500,
                         NorthernIrelandCost = 3400,
                         TotalCost = 22700,
-                        OrderId = 5
+                        OrderId = 5,
                     },
-                    new CalcResultLapcapDataDetails {
+                    new CalcResultLapcapDataDetails
+                    {
                         Name = "Plastic",
                         EnglandDisposalCost = "£23,000.00",
                         WalesDisposalCost = "£4,500.00",
@@ -402,9 +430,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandCost = 6700,
                         NorthernIrelandCost = 2100,
                         TotalCost = 36300,
-                        OrderId = 6
+                        OrderId = 6,
                     },
-                    new CalcResultLapcapDataDetails {
+                    new CalcResultLapcapDataDetails
+                    {
                         Name = "Steel",
                         EnglandDisposalCost = "£13,400.00",
                         WalesDisposalCost = "£0.00",
@@ -416,9 +445,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandCost = 7800,
                         NorthernIrelandCost = 0,
                         TotalCost = 21200,
-                        OrderId = 7
+                        OrderId = 7,
                     },
-                    new CalcResultLapcapDataDetails {
+                    new CalcResultLapcapDataDetails
+                    {
                         Name = "Wood",
                         EnglandDisposalCost = "£0.00",
                         WalesDisposalCost = "£12,000.00",
@@ -430,9 +460,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandCost = 0,
                         NorthernIrelandCost = 5600,
                         TotalCost = 17600,
-                        OrderId = 8
+                        OrderId = 8,
                     },
-                    new CalcResultLapcapDataDetails {
+                    new CalcResultLapcapDataDetails
+                    {
                         Name = "Other materials",
                         EnglandDisposalCost = "£3,400.00",
                         WalesDisposalCost = "£2,100.00",
@@ -444,9 +475,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandCost = 4200,
                         NorthernIrelandCost = 700,
                         TotalCost = 10400,
-                        OrderId = 9
+                        OrderId = 9,
                     },
-                    new CalcResultLapcapDataDetails {
+                    new CalcResultLapcapDataDetails
+                    {
                         Name = "Total",
                         EnglandDisposalCost = "£109,800.00",
                         WalesDisposalCost = "£24,750.00",
@@ -458,9 +490,10 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandCost = 49300,
                         NorthernIrelandCost = 19300,
                         TotalCost = 203150,
-                        OrderId = 10
+                        OrderId = 10,
                     },
-                    new CalcResultLapcapDataDetails {
+                    new CalcResultLapcapDataDetails
+                    {
                         Name = "1 Country Apportionment %s",
                         EnglandDisposalCost = "54.04873246%",
                         WalesDisposalCost = "12.18311592%",
@@ -472,9 +505,9 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandCost = 24.267782426778243m,
                         NorthernIrelandCost = 9.500369185331037m,
                         TotalCost = 100,
-                        OrderId = 11
-                    }
-                }
+                        OrderId = 11,
+                    },
+                },
             };
         }
 
@@ -483,7 +516,8 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
             return new CalcResultOnePlusFourApportionment()
             {
                 Name = "One Plus Four Apportionment",
-                CalcResultOnePlusFourApportionmentDetails = new List<CalcResultOnePlusFourApportionmentDetail> {
+                CalcResultOnePlusFourApportionmentDetails = new List<CalcResultOnePlusFourApportionmentDetail>
+                {
                     new CalcResultOnePlusFourApportionmentDetail()
                     {
                         EnglandDisposalTotal = "80",
@@ -548,8 +582,8 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         ScotlandTotal = 0.15M,
                         WalesTotal = 020M,
                         Name = OnePlus4ApportionmentColumnHeaders.OnePluseFourApportionment,
-                    }
-                }
+                    },
+                },
             };
         }
 
@@ -557,28 +591,30 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
         {
             return new CalcResultCommsCost()
             {
-                CalcResultCommsCostCommsCostByMaterial = [
+                CalcResultCommsCostCommsCostByMaterial =
+                [
                     new ()
                     {
-                        CommsCostByMaterialPricePerTonne="0.42",
-                        Name ="Material1",
+                        CommsCostByMaterialPricePerTonne = "0.42",
+                        Name = "Material1",
                     },
                     new ()
                     {
-                        CommsCostByMaterialPricePerTonne="0.3",
-                        Name ="Material2",
-                    }
+                        CommsCostByMaterialPricePerTonne = "0.3",
+                        Name = "Material2",
+                    },
                 ],
-                CommsCostByCountry = [
-                    new()
+                CommsCostByCountry =
+                [
+                    new ()
                     {
-                        Total= "Total"
+                        Total = "Total",
                     },
-                    new()
+                    new ()
                     {
-                        TotalValue= 2530
-                    }
-                ]
+                        TotalValue = 2530,
+                    },
+                ],
             };
         }
 
@@ -592,19 +628,19 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                     new CalcResultLateReportingTonnageDetail()
                     {
                         Name = "Aluminium",
-                        TotalLateReportingTonnage = 8000.00m
+                        TotalLateReportingTonnage = 8000.00m,
                     },
                     new CalcResultLateReportingTonnageDetail()
                     {
                         Name = "Plastic",
-                        TotalLateReportingTonnage = 2000.00m
+                        TotalLateReportingTonnage = 2000.00m,
                     },
                     new CalcResultLateReportingTonnageDetail()
                     {
                         Name = "Total",
-                        TotalLateReportingTonnage = 10000.00m
-                    }
-                }
+                        TotalLateReportingTonnage = 10000.00m,
+                    },
+                },
             };
         }
 
@@ -615,7 +651,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 BadDebtProvisionFor1 = 6021.3677166M,
                 BadDebtProvisionFor2A = 2098.887360M,
                 BadDebtProvisionTitleSection3 = 3900.000000M,
-                ProducerDisposalFees = GetProducerDisposalFees()
+                ProducerDisposalFees = GetProducerDisposalFees(),
             };
         }
 
@@ -626,7 +662,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 new CalcResultSummaryProducerDisposalFees()
                 {
                     ProducerId = "1",
-                    SubsidiaryId = "",
+                    SubsidiaryId = string.Empty,
                     ProducerName = "Allied Packaging",
                     Level = "1",
                     isTotalRow = false,
@@ -704,8 +740,8 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                     ScotlandTotalWithBadDebtProvisionTotalBill = 2564.98356493499m,
                     NorthernIrelandTotalWithBadDebtProvisionTotalBill = 1031.0928789640386m,
                     ProducerDisposalFeesByMaterial = GetProducerDisposalFeesByMaterial(),
-                    ProducerCommsFeesByMaterial = GetProducerCommsFeesByMaterial()
-                }
+                    ProducerCommsFeesByMaterial = GetProducerCommsFeesByMaterial(),
+                },
             };
         }
 
@@ -719,7 +755,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 1,
                         Code = "AL",
                         Name = "Aluminium",
-                        Description = "Aluminium"
+                        Description = "Aluminium",
                     },
                     new CalcResultSummaryProducerDisposalFeesByMaterial
                     {
@@ -733,7 +769,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 348.06m,
                         WalesWithBadDebtProvision = 78.46m,
                         ScotlandWithBadDebtProvision = 156.28m,
-                        NorthernIrelandWithBadDebtProvision = 61.18m
+                        NorthernIrelandWithBadDebtProvision = 61.18m,
                     }
                 },
                 {
@@ -742,7 +778,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 2,
                         Code = "FC",
                         Name = "Fibre composite",
-                        Description = "Fibre composite"
+                        Description = "Fibre composite",
                     },
                     new CalcResultSummaryProducerDisposalFeesByMaterial
                     {
@@ -756,7 +792,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 833.85m,
                         WalesWithBadDebtProvision = 187.96m,
                         ScotlandWithBadDebtProvision = 374.40m,
-                        NorthernIrelandWithBadDebtProvision = 146.57m
+                        NorthernIrelandWithBadDebtProvision = 146.57m,
                     }
                 },
                 {
@@ -765,7 +801,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 3,
                         Code = "GL",
                         Name = "Glass",
-                        Description = "Glass"
+                        Description = "Glass",
                     },
                     new CalcResultSummaryProducerDisposalFeesByMaterial
                     {
@@ -779,7 +815,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 1291.43m,
                         WalesWithBadDebtProvision = 291.10m,
                         ScotlandWithBadDebtProvision = 579.85m,
-                        NorthernIrelandWithBadDebtProvision = 227
+                        NorthernIrelandWithBadDebtProvision = 227,
                     }
                 },
                 {
@@ -788,7 +824,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 4,
                         Code = "PC",
                         Name = "Paper or card",
-                        Description = "Paper or card"
+                        Description = "Paper or card",
                     },
                     new CalcResultSummaryProducerDisposalFeesByMaterial
                     {
@@ -802,7 +838,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 24.97m,
                         WalesWithBadDebtProvision = 5.63m,
                         ScotlandWithBadDebtProvision = 11.21m,
-                        NorthernIrelandWithBadDebtProvision = 4.39m
+                        NorthernIrelandWithBadDebtProvision = 4.39m,
                     }
                 },
                 {
@@ -811,7 +847,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 5,
                         Code = "PL",
                         Name = "Plastic",
-                        Description = "Plastic"
+                        Description = "Plastic",
                     },
                     new CalcResultSummaryProducerDisposalFeesByMaterial
                     {
@@ -825,7 +861,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 5.45m,
                         WalesWithBadDebtProvision = 1.23m,
                         ScotlandWithBadDebtProvision = 2.44m,
-                        NorthernIrelandWithBadDebtProvision = 0.96m
+                        NorthernIrelandWithBadDebtProvision = 0.96m,
                     }
                 },
                 {
@@ -834,7 +870,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 6,
                         Code = "ST",
                         Name = "Steel",
-                        Description = "Steel"
+                        Description = "Steel",
                     },
                     new CalcResultSummaryProducerDisposalFeesByMaterial
                     {
@@ -848,7 +884,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 0.00m,
                         WalesWithBadDebtProvision = 0.00m,
                         ScotlandWithBadDebtProvision = 0.00m,
-                        NorthernIrelandWithBadDebtProvision = 0.00m
+                        NorthernIrelandWithBadDebtProvision = 0.00m,
                     }
                 },
                 {
@@ -857,7 +893,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 7,
                         Code = "WD",
                         Name = "Wood",
-                        Description = "Wood"
+                        Description = "Wood",
                     },
                     new CalcResultSummaryProducerDisposalFeesByMaterial
                     {
@@ -871,7 +907,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 464.06m,
                         WalesWithBadDebtProvision = 104.60m,
                         ScotlandWithBadDebtProvision = 208.36m,
-                        NorthernIrelandWithBadDebtProvision = 81.57m
+                        NorthernIrelandWithBadDebtProvision = 81.57m,
                     }
                 },
                 {
@@ -880,7 +916,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 8,
                         Code = "OT",
                         Name = "Other materials",
-                        Description = "Other materials"
+                        Description = "Other materials",
                     },
                     new CalcResultSummaryProducerDisposalFeesByMaterial
                     {
@@ -894,9 +930,9 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 30.48m,
                         WalesWithBadDebtProvision = 6.87m,
                         ScotlandWithBadDebtProvision = 13.68m,
-                        NorthernIrelandWithBadDebtProvision = 5.36m
+                        NorthernIrelandWithBadDebtProvision = 5.36m,
                     }
-                }
+                },
             };
         }
 
@@ -910,7 +946,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 1,
                         Code = "AL",
                         Name = "Aluminium",
-                        Description = "Aluminium"
+                        Description = "Aluminium",
                     },
                     new CalcResultSummaryProducerCommsFeesCostByMaterial
                     {
@@ -922,7 +958,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 106.61m,
                         WalesWithBadDebtProvision = 26.91m,
                         ScotlandWithBadDebtProvision = 49.41m,
-                        NorthernIrelandWithBadDebtProvision = 20.17m
+                        NorthernIrelandWithBadDebtProvision = 20.17m,
                     }
                 },
                 {
@@ -931,7 +967,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 2,
                         Code = "FC",
                         Name = "Fibre composite",
-                        Description = "Fibre composite"
+                        Description = "Fibre composite",
                     },
                     new CalcResultSummaryProducerCommsFeesCostByMaterial
                     {
@@ -943,7 +979,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 448.70m,
                         WalesWithBadDebtProvision = 113.25m,
                         ScotlandWithBadDebtProvision = 207.94m,
-                        NorthernIrelandWithBadDebtProvision = 84.89m
+                        NorthernIrelandWithBadDebtProvision = 84.89m,
                     }
                 },
                 {
@@ -952,7 +988,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 3,
                         Code = "GL",
                         Name = "Glass",
-                        Description = "Glass"
+                        Description = "Glass",
                     },
                     new CalcResultSummaryProducerCommsFeesCostByMaterial
                     {
@@ -964,7 +1000,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 122.53m,
                         WalesWithBadDebtProvision = 30.92m,
                         ScotlandWithBadDebtProvision = 56.78m,
-                        NorthernIrelandWithBadDebtProvision = 23.18m
+                        NorthernIrelandWithBadDebtProvision = 23.18m,
                     }
                 },
                 {
@@ -973,7 +1009,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 4,
                         Code = "PC",
                         Name = "Paper or card",
-                        Description = "Paper or card"
+                        Description = "Paper or card",
                     },
                     new CalcResultSummaryProducerCommsFeesCostByMaterial
                     {
@@ -985,7 +1021,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 12.35m,
                         WalesWithBadDebtProvision = 3.12m,
                         ScotlandWithBadDebtProvision = 5.72m,
-                        NorthernIrelandWithBadDebtProvision = 2.34m
+                        NorthernIrelandWithBadDebtProvision = 2.34m,
                     }
                 },
                 {
@@ -994,7 +1030,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 5,
                         Code = "PL",
                         Name = "Plastic",
-                        Description = "Plastic"
+                        Description = "Plastic",
                     },
                     new CalcResultSummaryProducerCommsFeesCostByMaterial
                     {
@@ -1006,7 +1042,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 1.49m,
                         WalesWithBadDebtProvision = 0.38m,
                         ScotlandWithBadDebtProvision = 0.69m,
-                        NorthernIrelandWithBadDebtProvision = 0.28m
+                        NorthernIrelandWithBadDebtProvision = 0.28m,
                     }
                 },
                 {
@@ -1015,7 +1051,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 6,
                         Code = "ST",
                         Name = "Steel",
-                        Description = "Steel"
+                        Description = "Steel",
                     },
                     new CalcResultSummaryProducerCommsFeesCostByMaterial
                     {
@@ -1027,7 +1063,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 0.00m,
                         WalesWithBadDebtProvision = 0.00m,
                         ScotlandWithBadDebtProvision = 0.00m,
-                        NorthernIrelandWithBadDebtProvision = 0.00m
+                        NorthernIrelandWithBadDebtProvision = 0.00m,
                     }
                 },
                 {
@@ -1036,7 +1072,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 7,
                         Code = "WD",
                         Name = "Wood",
-                        Description = "Wood"
+                        Description = "Wood",
                     },
                     new CalcResultSummaryProducerCommsFeesCostByMaterial
                     {
@@ -1048,7 +1084,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 37.95m,
                         WalesWithBadDebtProvision = 9.58m,
                         ScotlandWithBadDebtProvision = 17.59m,
-                        NorthernIrelandWithBadDebtProvision = 7.18m
+                        NorthernIrelandWithBadDebtProvision = 7.18m,
                     }
                 },
                 {
@@ -1057,7 +1093,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         Id = 8,
                         Code = "OT",
                         Name = "Other materials",
-                        Description = "Other materials"
+                        Description = "Other materials",
                     },
                     new CalcResultSummaryProducerCommsFeesCostByMaterial
                     {
@@ -1069,9 +1105,77 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                         EnglandWithBadDebtProvision = 26.54m,
                         WalesWithBadDebtProvision = 6.70m,
                         ScotlandWithBadDebtProvision = 12.30m,
-                        NorthernIrelandWithBadDebtProvision = 5.02m
+                        NorthernIrelandWithBadDebtProvision = 5.02m,
                     }
-                }
+                },
+            };
+        }
+
+        public static CalcResultScaledupProducers GetScaledupProducers()
+        {
+            return new CalcResultScaledupProducers
+            {
+                ColumnHeaders = new List<CalcResultScaledupProducerHeader>(),
+                MaterialBreakdownHeaders = new List<CalcResultScaledupProducerHeader>(),
+                TitleHeader = new CalcResultScaledupProducerHeader()
+                {
+                    Name = "Title",
+                    ColumnIndex = 1,
+                },
+                ScaledupProducers = new List<CalcResultScaledupProducer>()
+                {
+                    new CalcResultScaledupProducer
+                    {
+                        ProducerId = 1,
+                        ProducerName = "Producer Name",
+                        DaysInSubmissionPeriod = 91,
+                        DaysInWholePeriod = 91,
+                        IsSubtotalRow = false,
+                        IsTotalRow = false,
+                        Level = "1",
+                        ScaleupFactor = 1,
+                        SubmissionPeriodCode = "2024-P2",
+                        SubsidiaryId = string.Empty,
+                        ScaledupProducerTonnageByMaterial = new Dictionary<string, CalcResultScaledupProducerTonnage>
+                        {
+                            {
+                                "AL",
+                                new CalcResultScaledupProducerTonnage
+                                {
+                                    ReportedHouseholdPackagingWasteTonnage = 100,
+                                    ReportedPublicBinTonnage = 20,
+                                    TotalReportedTonnage = 120,
+                                    ReportedSelfManagedConsumerWasteTonnage = 60,
+                                    NetReportedTonnage = 180,
+                                    ScaledupReportedHouseholdPackagingWasteTonnage = 200,
+                                    ScaledupReportedPublicBinTonnage = 40,
+                                    ScaledupTotalReportedTonnage = 240,
+                                    ScaledupReportedSelfManagedConsumerWasteTonnage = 120,
+                                    ScaledupNetReportedTonnage = 360,
+                                }
+                            },
+                            {
+                                "GL",
+                                new CalcResultScaledupProducerTonnage
+                                {
+                                    ReportedHouseholdPackagingWasteTonnage = 100,
+                                    ReportedPublicBinTonnage = 20,
+                                    TotalReportedTonnage = 120,
+                                    ReportedSelfManagedConsumerWasteTonnage = 60,
+                                    HouseholdDrinksContainersTonnageGlass = 70,
+                                    NetReportedTonnage = 180,
+                                    ScaledupReportedHouseholdPackagingWasteTonnage = 200,
+                                    ScaledupReportedPublicBinTonnage = 40,
+                                    ScaledupTotalReportedTonnage = 240,
+                                    ScaledupReportedSelfManagedConsumerWasteTonnage = 120,
+                                    ScaledupHouseholdDrinksContainersTonnageGlass = 140,
+                                    ScaledupNetReportedTonnage = 360,
+                                }
+                            },
+
+                        },
+                    },
+                },
             };
         }
 
@@ -1084,57 +1188,57 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                     Id = 1,
                     Code = "AL",
                     Name = "Aluminium",
-                    Description = "Aluminium"
+                    Description = "Aluminium",
                 },
                 new MaterialDetail
                 {
                     Id = 2,
                     Code = "FC",
                     Name = "Fibre composite",
-                    Description = "Fibre composite"
+                    Description = "Fibre composite",
                 },
                 new MaterialDetail
                 {
                     Id = 3,
                     Code = "GL",
                     Name = "Glass",
-                    Description = "Glass"
+                    Description = "Glass",
                 },
                 new MaterialDetail
                 {
                     Id = 4,
                     Code = "PC",
                     Name = "Paper or card",
-                    Description = "Paper or card"
+                    Description = "Paper or card",
                 },
                 new MaterialDetail
                 {
                     Id = 5,
                     Code = "PL",
                     Name = "Plastic",
-                    Description = "Plastic"
+                    Description = "Plastic",
                 },
                 new MaterialDetail
                 {
                     Id = 6,
                     Code = "ST",
                     Name = "Steel",
-                    Description = "Steel"
+                    Description = "Steel",
                 },
                 new MaterialDetail
                 {
                     Id = 7,
                     Code = "WD",
                     Name = "Wood",
-                    Description = "Wood"
+                    Description = "Wood",
                 },
                 new MaterialDetail
                 {
                     Id = 8,
                     Code = "OT",
                     Name = "Other materials",
-                    Description = "Other materials"
-                }
+                    Description = "Other materials",
+                },
             };
         }
 
@@ -1145,6 +1249,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 new ProducerDetail
                 {
                     Id = 1,
+                    ProducerId = 1,
                     ProducerName = "Allied Packaging",
                     CalculatorRunId = 1,
                     CalculatorRun = new CalculatorRun { Financial_Year = "2024-25", Name = "Test Run 1" },
@@ -1152,22 +1257,25 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 new ProducerDetail
                 {
                     Id = 2,
+                    ProducerId = 2,
                     ProducerName = "Beeline Materials",
                     CalculatorRunId = 1,
-                    CalculatorRun = new CalculatorRun { Financial_Year = "2024-25", Name = "Test Run 1" }
+                    CalculatorRun = new CalculatorRun { Financial_Year = "2024-25", Name = "Test Run 1" },
                 },
                 new ProducerDetail
                 {
                     Id = 3,
+                    ProducerId = 3,
                     ProducerName = "Cloud Boxes",
                     CalculatorRunId = 1,
-                    CalculatorRun = new CalculatorRun { Financial_Year = "2024-25", Name = "Test Run 1" }
-                }
+                    CalculatorRun = new CalculatorRun { Financial_Year = "2024-25", Name = "Test Run 1" },
+                },
             };
 
             var producerReportedMaterials = GetProducerReportedMaterials();
 
-            producers.ForEach(producer => {
+            producers.ForEach(producer =>
+            {
                 producerReportedMaterials.ForEach(producerReportedMaterial =>
                 {
                     producer.ProducerReportedMaterials.Add(producerReportedMaterial);
@@ -1187,7 +1295,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                     PackagingTonnage = 1000.00m,
                     PackagingType = "HH",
                     MaterialId = 1,
-                    ProducerDetail = null
+                    ProducerDetail = null,
                 },
                 new ProducerReportedMaterial
                 {
@@ -1195,7 +1303,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                     PackagingTonnage = 20.00m,
                     PackagingType = "CW",
                     MaterialId = 1,
-                    ProducerDetail = null
+                    ProducerDetail = null,
                 },
                 new ProducerReportedMaterial
                 {
@@ -1203,7 +1311,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                     PackagingTonnage = 20.00m,
                     PackagingType = "PB",
                     MaterialId = 3,
-                    ProducerDetail = null
+                    ProducerDetail = null,
                 },
                 new ProducerReportedMaterial
                 {
@@ -1211,8 +1319,8 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                     PackagingTonnage = 50.00m,
                     PackagingType = "HDC",
                     MaterialId = 4,
-                    ProducerDetail = null
-                }
+                    ProducerDetail = null,
+                },
             };
         }
 
@@ -1225,7 +1333,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "England",
                 ParameterType = "Communication costs by country",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1233,7 +1341,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Northern Ireland",
                 ParameterType = "Communication costs by country",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1241,7 +1349,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Scotland",
                 ParameterType = "Communication costs by country",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1249,7 +1357,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "United Kingdom",
                 ParameterType = "Communication costs by country",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1257,7 +1365,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Wales",
                 ParameterType = "Communication costs by country",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1265,7 +1373,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Aluminium",
                 ParameterType = "Communication costs by material",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1273,7 +1381,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Fibre composite",
                 ParameterType = "Communication costs by material",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1281,7 +1389,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Glass",
                 ParameterType = "Communication costs by material",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1289,7 +1397,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Paper or card",
                 ParameterType = "Communication costs by material",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1297,7 +1405,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Plastic",
                 ParameterType = "Communication costs by material",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1305,7 +1413,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Steel",
                 ParameterType = "Communication costs by material",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1313,7 +1421,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Wood",
                 ParameterType = "Communication costs by material",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1321,7 +1429,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Fibre composite",
                 ParameterType = "Late reporting tonnage",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1329,7 +1437,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Glass",
                 ParameterType = "Late reporting tonnage",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1337,7 +1445,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Aluminium",
                 ParameterType = "Late reporting tonnage",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1345,7 +1453,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Wood",
                 ParameterType = "Late reporting tonnage",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1353,7 +1461,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Steel",
                 ParameterType = "Late reporting tonnage",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1361,7 +1469,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Paper or card",
                 ParameterType = "Late reporting tonnage",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1369,7 +1477,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "England",
                 ParameterType = "Local authority data preparation costs",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1377,7 +1485,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Northern Ireland",
                 ParameterType = "Local authority data preparation costs",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1385,7 +1493,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Scotland",
                 ParameterType = "Local authority data preparation costs",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1393,7 +1501,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Wales",
                 ParameterType = "Local authority data preparation costs",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1401,7 +1509,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Amount Decrease",
                 ParameterType = "Materiality threshold",
                 ValidRangeFrom = -999999999.990m,
-                ValidRangeTo = 0.00m
+                ValidRangeTo = 0.00m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1409,7 +1517,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Amount Increase",
                 ParameterType = "Materiality threshold",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1417,7 +1525,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Percent Decrease",
                 ParameterType = "Materiality threshold",
                 ValidRangeFrom = -999.990m,
-                ValidRangeTo = 0.00m
+                ValidRangeTo = 0.00m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1425,7 +1533,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Percent Increase",
                 ParameterType = "Materiality threshold",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999.990m
+                ValidRangeTo = 999.990m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1433,7 +1541,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Other",
                 ParameterType = "Other materials",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1441,7 +1549,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Other materials",
                 ParameterType = "Late reporting tonnage",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1449,7 +1557,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Bad debt provision",
                 ParameterType = "Percentage",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 1000.000m
+                ValidRangeTo = 1000.000m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1457,7 +1565,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Plastic",
                 ParameterType = "Late reporting tonnage",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1465,7 +1573,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "England",
                 ParameterType = "Scheme administrator operating costs",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1473,7 +1581,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Northern Ireland",
                 ParameterType = "Scheme administrator operating costs",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1481,7 +1589,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Scotland",
                 ParameterType = "Scheme administrator operating costs",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1489,7 +1597,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Wales",
                 ParameterType = "Scheme administrator operating costs",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1497,7 +1605,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "England",
                 ParameterType = "Scheme setup costs",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1505,7 +1613,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Northern Ireland",
                 ParameterType = "Scheme setup costs",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1513,7 +1621,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Scotland",
                 ParameterType = "Scheme setup costs",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1521,7 +1629,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Wales",
                 ParameterType = "Scheme setup costs",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1529,7 +1637,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Amount Decrease",
                 ParameterType = "Tonnage change threshold",
                 ValidRangeFrom = -999999999.990m,
-                ValidRangeTo = 0.00m
+                ValidRangeTo = 0.00m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1537,7 +1645,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Amount Increase",
                 ParameterType = "Tonnage change threshold",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999999999.99m
+                ValidRangeTo = 999999999.99m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1545,7 +1653,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Percent Decrease",
                 ParameterType = "Tonnage change threshold",
                 ValidRangeFrom = -999.990m,
-                ValidRangeTo = 0.00m
+                ValidRangeTo = 0.00m,
             });
             list.Add(new DefaultParameterTemplateMaster
             {
@@ -1553,11 +1661,9 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder
                 ParameterCategory = "Percent Increase",
                 ParameterType = "Tonnage change threshold",
                 ValidRangeFrom = 0m,
-                ValidRangeTo = 999.990m
+                ValidRangeTo = 999.990m,
             });
             return list;
         }
-
-
     }
 }

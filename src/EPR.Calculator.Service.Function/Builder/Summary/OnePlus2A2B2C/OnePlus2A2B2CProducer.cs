@@ -5,7 +5,7 @@ namespace EPR.Calculator.Service.Function.Builder.Summary.OnePlus2A2B2C
 {
     public static class OnePlus2A2B2CProducer
     {
-        public static readonly int ColumnIndex = 242;
+        public static readonly int ColumnIndex = 243;
 
         public static IEnumerable<CalcResultSummaryHeader> GetHeaders()
         {

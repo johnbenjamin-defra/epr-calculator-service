@@ -307,7 +307,7 @@
         {
             // Act
             var result = LaDataPrepCostsProducer.GetHeaders().ToList();
-            var columnIndex = 251;
+            var columnIndex = 252;
             var expectedResult = new List<CalcResultSummaryHeader>();
             expectedResult.AddRange([
                 new CalcResultSummaryHeader { Name = LaDataPrepCostsHeaders.TotalProducerFeeWithoutBadDebtProvision , ColumnIndex = columnIndex },
@@ -341,7 +341,7 @@
         {
             // Act
             var result = LaDataPrepCostsProducer.GetSummaryHeaders().ToList();
-            var columnIndex = 251;
+            var columnIndex = 252;
 
             var expectedResult = new List<CalcResultSummaryHeader>();
             expectedResult.AddRange([

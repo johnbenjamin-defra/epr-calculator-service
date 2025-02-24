@@ -272,7 +272,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Builder.Summary.ThreeSa
         {
             // Act
             var result = ThreeSaCostsSummary.GetHeaders().ToList();
-            var columnIndex = 244;
+            var columnIndex = 245;
 
             var expectedResult = new List<CalcResultSummaryHeader>();
             expectedResult.AddRange([

@@ -69,15 +69,17 @@ namespace EPR.Calculator.Service.Function.Builder
                     Name = string.Empty,
                 },
             };
-
+            result.CalcResultScaledupProducers = await this.calcResultScaledupProducersBuilder.Construct(resultsRequestDto);
             result.CalcResultDetail = await this.calcResultDetailBuilder.Construct(resultsRequestDto);
             result.CalcResultLapcapData = await this.lapcapBuilder.Construct(resultsRequestDto);
             result.CalcResultLateReportingTonnageData = await this.lateReportingBuilder.Construct(resultsRequestDto);
             result.CalcResultParameterOtherCost = await this.calcResultParameterOtherCostBuilder.Construct(resultsRequestDto);
             result.CalcResultOnePlusFourApportionment = this.lapcapplusFourApportionmentBuilder.Construct(resultsRequestDto, result);
-            result.CalcResultCommsCostReportDetail = await this.commsCostReportBuilder.Construct(resultsRequestDto, result.CalcResultOnePlusFourApportionment);
-            result.CalcResultLaDisposalCostData = await this.laDisposalCostBuilder.Construct(resultsRequestDto, result);
             result.CalcResultScaledupProducers = await this.calcResultScaledupProducersBuilder.Construct(resultsRequestDto);
+            result.CalcResultCommsCostReportDetail = await this.commsCostReportBuilder.Construct(
+                resultsRequestDto, result.CalcResultOnePlusFourApportionment, result);
+            result.CalcResultLaDisposalCostData = await this.laDisposalCostBuilder.Construct(resultsRequestDto, result);
+            
             result.CalcResultSummary = await this.summaryBuilder.Construct(resultsRequestDto, result);
 
             return result;

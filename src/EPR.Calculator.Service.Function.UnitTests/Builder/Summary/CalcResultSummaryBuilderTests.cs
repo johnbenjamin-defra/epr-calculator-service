@@ -3,6 +3,7 @@
 namespace EPR.Calculator.Service.Function.UnitTests
 {
     using AutoFixture;
+    using EPR.Calculator.Service.Function.Builder.ScaledupProducers;
     using EPR.Calculator.Service.Function.Builder.Summary;
     using EPR.Calculator.Service.Function.Builder.Summary.OneAndTwoA;
     using EPR.Calculator.Service.Function.Constants;
@@ -11,6 +12,7 @@ namespace EPR.Calculator.Service.Function.UnitTests
     using EPR.Calculator.Service.Function.Dtos;
     using EPR.Calculator.Service.Function.Mappers;
     using EPR.Calculator.Service.Function.Models;
+    using EPR.Calculator.Service.Function.UnitTests.Builder;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -21,6 +23,7 @@ namespace EPR.Calculator.Service.Function.UnitTests
         private readonly ApplicationDBContext context;
         private readonly CalcResultSummaryBuilder calcResultsService;
         private readonly CalcResult calcResult;
+        private readonly CalcResultScaledupProducers scaledupProducers;
 
         private Fixture Fixture { get; init; } = new Fixture();
 
@@ -31,7 +34,7 @@ namespace EPR.Calculator.Service.Function.UnitTests
                 .Options;
             this.context = new ApplicationDBContext(this.dbContextOptions);
             this.calcResultsService = new CalcResultSummaryBuilder(this.context);
-
+            this.scaledupProducers = TestDataHelper.GetScaledupProducers();
             this.calcResult = new CalcResult
             {
                 CalcResultParameterOtherCost = new CalcResultParameterOtherCost
@@ -268,6 +271,14 @@ namespace EPR.Calculator.Service.Function.UnitTests
                     ],
                 },
                 CalcResultLateReportingTonnageData = Fixture.Create<CalcResultLateReportingTonnage>(),
+
+                CalcResultScaledupProducers = new CalcResultScaledupProducers
+                {
+                    TitleHeader = null,
+                    MaterialBreakdownHeaders = null,
+                    ColumnHeaders = null,
+                    ScaledupProducers = new List<CalcResultScaledupProducer>(),
+                },
             };
 
             // Seed database
@@ -597,15 +608,16 @@ namespace EPR.Calculator.Service.Function.UnitTests
 
             var totalPackagingTonnage = CalcResultSummaryBuilder.GetTotalPackagingTonnagePerRun(runProducerMaterialDetails, materials, 1);
 
-            var result = CalcResultSummaryBuilder.GetCalcResultSummary(orderedProducerDetails, materials,
-                runProducerMaterialDetails, this.calcResult, totalPackagingTonnage);
+            var result = new CalcResultSummaryBuilder(this.context).GetCalcResultSummary(orderedProducerDetails, materials,
+                this.calcResult, totalPackagingTonnage);
+
             Assert.IsNotNull(result);
-            Assert.AreEqual(125, result.ColumnHeaders.Count());
+            Assert.AreEqual(128, result.ColumnHeaders.Count());
 
             var producerDisposalFees = result.ProducerDisposalFees;
             Assert.IsNotNull(producerDisposalFees);
 
-            var totals = producerDisposalFees.First(t => t.Level == "Totals");
+            var totals = producerDisposalFees.First(t => t.isProducerScaledup == "Totals");
             var producer = producerDisposalFees.First(t => t.Level == "1");
             Assert.IsNotNull(producer);
 
@@ -665,7 +677,7 @@ namespace EPR.Calculator.Service.Function.UnitTests
             Assert.AreEqual(0.13m, glassTonnage.TotalReportedTonnage);
             Assert.AreEqual(0.13m, glassTonnage.NetReportedTonnage);
             Assert.AreEqual(0.1m, glassTonnage.ScaledupReportedHouseholdPackagingWasteTonnage);
-            Assert.AreEqual(0m, glassTonnage.ScaledupReportedPublicBinTonnage);
+            Assert.AreEqual(0, glassTonnage.ScaledupReportedPublicBinTonnage);
             Assert.AreEqual(0.03m, glassTonnage.ScaledupHouseholdDrinksContainersTonnageGlass);
             Assert.AreEqual(0.13m, glassTonnage.ScaledupTotalReportedTonnage);
             Assert.AreEqual(0.13m, glassTonnage.ScaledupNetReportedTonnage);
@@ -676,7 +688,7 @@ namespace EPR.Calculator.Service.Function.UnitTests
             context.Material.AddRange(new List<Material>
             {
                 new () { Id = 1, Name = "Material1", Code = "123" },
-                new () { Id = 2, Name = "Material2", Code = "456" },
+                new () { Id = 2, Name = "Material2", Code = MaterialCodes.Glass },
             });
 
             context.ProducerDetail.AddRange(new List<ProducerDetail>

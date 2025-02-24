@@ -1,4 +1,5 @@
-﻿using EPR.Calculator.Service.Function.Models;
+﻿using EPR.Calculator.Service.Function.Constants;
+using EPR.Calculator.Service.Function.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,8 +46,8 @@ public static class CalcResultOneAndTwoAUtil
         }
 
         var totalFee = producerDisposalFees
-            .FirstOrDefault(t => t.Level == "Totals");
-        
+            .FirstOrDefault(t => t.isProducerScaledup == CommonConstants.Totals);
+
         if (totalFee is null)
         {
             return 0m;

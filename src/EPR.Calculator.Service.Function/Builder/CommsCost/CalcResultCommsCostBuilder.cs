@@ -27,7 +27,7 @@ namespace EPR.Calculator.Service.Function.Builder.CommsCost
         public const string PoundSign = "£";
 
         public async Task<CalcResultCommsCost> Construct(CalcResultsRequestDto resultsRequestDto,
-            CalcResultOnePlusFourApportionment apportionment)
+           CalcResultOnePlusFourApportionment apportionment, CalcResult calcResult)
         {
             var runId = resultsRequestDto.RunId;
             var culture = CultureInfo.CreateSpecificCulture(EnGb);
@@ -45,24 +45,23 @@ namespace EPR.Calculator.Service.Function.Builder.CommsCost
             var materialNames = materials.Select(x => x.Name).ToList();
 
             var allDefaultResults = await (from run in context.CalculatorRuns
-                    join defaultMaster in context.DefaultParameterSettings on run.DefaultParameterSettingMasterId equals
-                        defaultMaster.Id
-                    join defaultDetail in context.DefaultParameterSettingDetail on defaultMaster.Id equals defaultDetail
-                        .DefaultParameterSettingMasterId
-                    join defaultTemplate in context.DefaultParameterTemplateMasterList on defaultDetail
-                        .ParameterUniqueReferenceId equals defaultTemplate.ParameterUniqueReferenceId
-                    where run.Id == runId
-                    select new CalcCommsBuilderResult
-                    {
-                        ParameterValue = defaultDetail.ParameterValue,
-                        ParameterType = defaultTemplate.ParameterType,
-                        ParameterCategory = defaultTemplate.ParameterCategory
+                                           join defaultMaster in context.DefaultParameterSettings on run.DefaultParameterSettingMasterId equals
+                                               defaultMaster.Id
+                                           join defaultDetail in context.DefaultParameterSettingDetail on defaultMaster.Id equals defaultDetail
+                                               .DefaultParameterSettingMasterId
+                                           join defaultTemplate in context.DefaultParameterTemplateMasterList on defaultDetail
+                                               .ParameterUniqueReferenceId equals defaultTemplate.ParameterUniqueReferenceId
+                                           where run.Id == runId
+                                           select new CalcCommsBuilderResult
+                                           {
+                                               ParameterValue = defaultDetail.ParameterValue,
+                                               ParameterType = defaultTemplate.ParameterType,
+                                               ParameterCategory = defaultTemplate.ParameterCategory,
                                            }).Distinct().ToListAsync();
             var materialDefaults = allDefaultResults.Where(x =>
                 x.ParameterType == CommunicationCostByMaterial && materialNames.Contains(x.ParameterCategory));
 
-            var producerReportedMaterials = await GetProducerReportedMaterials(context, runId);
-
+            var producerReportedMaterials = await this.GetProducerReportedMaterials(context, runId);
 
             var list = new List<CalcResultCommsCostCommsCostByMaterial>();
 
@@ -82,27 +81,39 @@ namespace EPR.Calculator.Service.Function.Builder.CommsCost
                 LateReportingTonnage = CommsCostByMaterialHeaderConstant.LateReportingTonnage,
                 ProducerReportedHouseholdPlusLateReportingTonnage = CommsCostByMaterialHeaderConstant
                     .ProducerReportedHouseholdPlusLateReportingTonnage,
-                CommsCostByMaterialPricePerTonne = CommsCostByMaterialHeaderConstant.CommsCostByMaterialPricePerTonne
+                CommsCostByMaterialPricePerTonne = CommsCostByMaterialHeaderConstant.CommsCostByMaterialPricePerTonne,
             };
             list.Add(header);
+
+            producerReportedMaterials = producerReportedMaterials.Where(t => !calcResult.CalcResultScaledupProducers.ScaledupProducers.
+                Any(i => i.ProducerId == t.ProducerDetail?.ProducerId)).ToList();
+
+            var scaledUpProducerReportedOn = calcResult.CalcResultScaledupProducers
+                  .ScaledupProducers.First(t => t.IsTotalRow);
 
             foreach (var materialName in materialNames)
             {
                 var commsCost = GetCommsCost(materialDefaults, materialName, apportionmentDetail, culture);
                 var currentMaterial = materials.Single(x => x.Name == materialName);
+
                 var producerReportedTon = producerReportedMaterials.Where(x => x.MaterialId == currentMaterial.Id && x.PackagingType != PackagingTypes.PublicBin && x.PackagingType != PackagingTypes.HouseholdDrinksContainers)
                     .Sum(x => x.PackagingTonnage);
+
+                var scaledProducerTonnages = new CalcResultScaledupProducerTonnage();
+
+                if (scaledUpProducerReportedOn.ScaledupProducerTonnageByMaterial.TryGetValue(materialName, out var val))
+                {
+                    scaledProducerTonnages = val;
+                }
+
                 var lateReportingTonnage = allDefaultResults.Single(x =>
                     x.ParameterType == LateReportingTonnage && x.ParameterCategory == materialName);
                 var publicBinTonnage = producerReportedMaterials.Where(p => p.MaterialId == currentMaterial.Id && p.PackagingType == PackagingTypes.PublicBin).Sum(p => p.PackagingTonnage);
                 var householdcontainers = producerReportedMaterials.Where(p => p.MaterialId == currentMaterial.Id && p.PackagingType == PackagingTypes.HouseholdDrinksContainers).Sum(p => p.PackagingTonnage);
 
-                commsCost.ReportedPublicBinTonnageValue = publicBinTonnage;
-                commsCost.HouseholdDrinksContainersValue = householdcontainers;
-
-                commsCost.ProducerReportedHouseholdPackagingWasteTonnageValue = producerReportedTon;
-                commsCost.ReportedPublicBinTonnageValue = publicBinTonnage;
-                commsCost.HouseholdDrinksContainersValue = householdcontainers;
+                commsCost.ProducerReportedHouseholdPackagingWasteTonnageValue = producerReportedTon + scaledProducerTonnages.ScaledupReportedHouseholdPackagingWasteTonnage;
+                commsCost.ReportedPublicBinTonnageValue = publicBinTonnage + scaledProducerTonnages.ScaledupReportedPublicBinTonnage;
+                commsCost.HouseholdDrinksContainersValue = householdcontainers + scaledProducerTonnages.ScaledupHouseholdDrinksContainersTonnageGlass;
 
                 commsCost.LateReportingTonnageValue = lateReportingTonnage.ParameterValue;
                 commsCost.ProducerReportedTotalTonnage =
@@ -110,22 +121,15 @@ namespace EPR.Calculator.Service.Function.Builder.CommsCost
                     commsCost.LateReportingTonnageValue +
                     commsCost.ReportedPublicBinTonnageValue +
                     commsCost.HouseholdDrinksContainersValue;
-                if (commsCost.ProducerReportedTotalTonnage != 0)
-                {
-                    commsCost.CommsCostByMaterialPricePerTonneValue =
-                        commsCost.TotalValue / commsCost.ProducerReportedTotalTonnage;
-                }
-                else
-                {
-                    commsCost.CommsCostByMaterialPricePerTonneValue = 0;
-                }
+                commsCost.CommsCostByMaterialPricePerTonneValue = commsCost.ProducerReportedTotalTonnage != 0
+                        ? commsCost.TotalValue / commsCost.ProducerReportedTotalTonnage : 0;
 
                 commsCost.ProducerReportedHouseholdPackagingWasteTonnage =
                     $"{commsCost.ProducerReportedHouseholdPackagingWasteTonnageValue:0.000}";
                 commsCost.ReportedPublicBinTonnage =
                     $"{commsCost.ReportedPublicBinTonnageValue:0.0000}";
-                commsCost.HouseholdDrinksContainers =
-                    $"{commsCost.HouseholdDrinksContainersValue:0.0000}";
+                commsCost.HouseholdDrinksContainers = materialName == MaterialNames.Glass ?
+                    $"{commsCost.HouseholdDrinksContainersValue:0.0000}" : string.Empty;
                 commsCost.LateReportingTonnage = $"{commsCost.LateReportingTonnageValue:0.000}";
                 commsCost.ProducerReportedHouseholdPlusLateReportingTonnage =
                     $"{commsCost.ProducerReportedTotalTonnage:0.000}";
@@ -139,7 +143,6 @@ namespace EPR.Calculator.Service.Function.Builder.CommsCost
 
             list.Add(totalRow);
             result.CalcResultCommsCostCommsCostByMaterial = list;
-
 
             var commsCostByUk =
                 allDefaultResults.Single(x =>
@@ -179,7 +182,8 @@ namespace EPR.Calculator.Service.Function.Builder.CommsCost
                               Id = mat.Id,
                               MaterialId = mat.MaterialId,
                               PackagingTonnage = mat.PackagingTonnage,
-                              PackagingType = mat.PackagingType
+                              PackagingType = mat.PackagingType,
+                              ProducerDetail = new ProducerDetail() { ProducerId = pd.ProducerId },
                           }).Distinct().ToListAsync();
         }
 
