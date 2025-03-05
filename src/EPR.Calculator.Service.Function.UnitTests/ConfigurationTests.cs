@@ -187,5 +187,22 @@ namespace EPR.Calculator.Service.Function.UnitTests
             // Assert
             Assert.AreEqual(transposeEndpoint, result);
         }
+
+        [TestMethod]
+        public void CanGetDbLoadingChunkSize()
+        {
+            // Arrange
+            var dbLoadingChunkSize = this.Fixture.Create<int>();
+
+            Environment.SetEnvironmentVariable(
+               EnvironmentVariableKeys.DbLoadingChunkSize,
+               dbLoadingChunkSize.ToString());
+
+            // Act
+            var result = new Configuration().DbLoadingChunkSize;
+
+            // Assert
+            Assert.AreEqual(dbLoadingChunkSize, result);
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Misc
     using System.Configuration;
     using AutoFixture;
     using Castle.Core.Configuration;
+    using EPR.Calculator.Service.Function.Constants;
     using EPR.Calculator.Service.Function.Misc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -135,6 +136,20 @@ namespace EPR.Calculator.Service.Function.UnitTests.Misc
 
             // Assert
             Assert.IsInstanceOfType(this.TestClass.BlobConnectionString, typeof(string));
+        }
+
+        [TestMethod]
+        public void CanGetDbLoadingChunkSize()
+        {
+            // Arrange
+            var dbLoadingChunkSize = this.Fixture.Create<int>();
+            var blobConnectionSection = new Mock<IConfigurationSection>();
+            blobConnectionSection.Setup(v => v.Value).Returns(dbLoadingChunkSize.ToString());
+            this.Configuration.Setup(c => c.GetSection(EnvironmentVariableKeys.DbLoadingChunkSize))
+                .Returns(blobConnectionSection.Object);
+
+            // Assert
+            Assert.IsInstanceOfType(this.TestClass.DbLoadingChunkSize, typeof(int));
         }
     }
 }

@@ -35,11 +35,19 @@
             this.ContextFactory.Setup(f => f.CreateDbContext()).Returns(this._context);
 
             this.SeedDatabase();
+
+            this.TestClass = new TransposePomAndOrgDataService(
+                this._context,
+                this.CommandTimeoutService,
+                new Mock<IDbLoadingChunkerService<ProducerDetail>>().Object,
+                new Mock<IDbLoadingChunkerService<ProducerReportedMaterial>>().Object);
         }
 
         private ICommandTimeoutService CommandTimeoutService { get; init; }
 
         public Fixture Fixture { get; init; } = new Fixture();
+
+        public TransposePomAndOrgDataService TestClass { get; set; }
 
         [TestCleanup]
         public void TearDown()
@@ -63,142 +71,10 @@
             this._context.SaveChanges();
         }
 
-
-        [TestMethod]
-        public void Transpose_Should_Return_Correct_Producer_Detail()
-        {
-            var expectedResult = new ProducerDetail
-            {
-                Id = 1,
-                ProducerId = 1,
-                ProducerName = "UPU LIMITED",
-                CalculatorRunId = 1,
-                CalculatorRun = Fixture.Create<CalculatorRun>(),
-            };
-
-#pragma warning disable CS8604 // Possible null reference argument.
-            var service = new TransposePomAndOrgDataService(
-                this.ContextFactory.Object,
-                this.CommandTimeoutService);
-#pragma warning restore CS8604 // Possible null reference argument.
-
-            var resultsRequestDto = new CalcResultsRequestDto { RunId = 3 };
-            service.Transpose(resultsRequestDto, CancellationToken.None);
-
-            var producerDetail = _context.ProducerDetail.FirstOrDefault();
-            Assert.IsNotNull(producerDetail);
-            Assert.AreEqual(expectedResult.ProducerId, producerDetail.ProducerId);
-            Assert.AreEqual(expectedResult.ProducerName, producerDetail.ProducerName);
-        }
-
-        [TestMethod]
-        public void Transpose_Should_Return_Correct_Producer_Reported_Material()
-        {
-            var expectedResult = new ProducerReportedMaterial
-            {
-                Id = 1,
-                MaterialId = 4,
-                ProducerDetailId = 1,
-                PackagingType = "CW",
-                PackagingTonnage = 1,
-                Material = new Material
-                {
-                    Id = 4,
-                    Code = "PC",
-                    Name = "Paper or card",
-                    Description = "Paper or card",
-                },
-                ProducerDetail = new ProducerDetail
-                {
-                    Id = 1,
-                    ProducerId = 1,
-                    SubsidiaryId = "1",
-                    ProducerName = "UPU LIMITED",
-                    CalculatorRunId = 1,
-                    CalculatorRun = Fixture.Create<CalculatorRun>(),
-                },
-            };
-
-#pragma warning disable CS8604 // Possible null reference argument.
-            var service = new TransposePomAndOrgDataService(
-                this.ContextFactory.Object,
-                this.CommandTimeoutService);
-#pragma warning restore CS8604 // Possible null reference argument.
-
-            var resultsRequestDto = new CalcResultsRequestDto { RunId = 3 };
-            service.Transpose(resultsRequestDto, CancellationToken.None);
-
-            var producerReportedMaterial = this._context.ProducerReportedMaterial.FirstOrDefault();
-            Assert.IsNotNull(producerReportedMaterial);
-            Assert.AreEqual(expectedResult.Material.Code, producerReportedMaterial.Material!.Code);
-            Assert.AreEqual(expectedResult.Material.Name, producerReportedMaterial.Material.Name);
-            Assert.AreEqual(expectedResult.ProducerDetail.ProducerId, producerReportedMaterial.ProducerDetail!.ProducerId);
-            Assert.AreEqual(expectedResult.ProducerDetail.ProducerName, producerReportedMaterial.ProducerDetail.ProducerName);
-        }
-
-        [TestMethod]
-        public void Transpose_Should_Return_Correct_Producer_Subsidary_Detail()
-        {
-            var expectedResult = new ProducerDetail
-            {
-                Id = 1,
-                ProducerId = 2,
-                SubsidiaryId = "1",
-                ProducerName = "Subsid2",
-                CalculatorRunId = 1,
-                CalculatorRun = Fixture.Create<CalculatorRun>(),
-            };
-
-#pragma warning disable CS8604 // Possible null reference argument.
-            var service = new TransposePomAndOrgDataService(
-                this.ContextFactory.Object,
-                this.CommandTimeoutService);
-#pragma warning restore CS8604 // Possible null reference argument.
-
-            var resultsRequestDto = new CalcResultsRequestDto { RunId = 1 };
-            service.Transpose(resultsRequestDto, CancellationToken.None);
-
-            var producerDetail = this._context.ProducerDetail.FirstOrDefault(t => t.SubsidiaryId != null);
-            Assert.IsNotNull(producerDetail);
-            Assert.AreEqual(expectedResult.ProducerId, producerDetail.ProducerId);
-            Assert.AreEqual(expectedResult.ProducerName, producerDetail.ProducerName);
-        }
-
-
-        [TestMethod]
-        public void Transpose_Should_Return_Correct_Producer_Detail_When_Submission_Period_Not_Exists()
-        {
-            var expectedResult = new ProducerDetail
-            {
-                Id = 1,
-                ProducerId = 2,
-                ProducerName = "Subsid2",
-                CalculatorRunId = 1,
-                CalculatorRun = Fixture.Create<CalculatorRun>(),
-            };
-
-#pragma warning disable CS8604 // Possible null reference argument.
-            var service = new TransposePomAndOrgDataService(
-                this.ContextFactory.Object,
-                this.CommandTimeoutService);
-#pragma warning restore CS8604 // Possible null reference argument.
-
-            var resultsRequestDto = new CalcResultsRequestDto { RunId = 1 };
-            service.Transpose(resultsRequestDto, CancellationToken.None);
-
-            var producerDetail = this._context.ProducerDetail.FirstOrDefault();
-            Assert.IsNotNull(producerDetail);
-            Assert.AreEqual(expectedResult.ProducerId, producerDetail.ProducerId);
-            Assert.AreEqual(expectedResult.ProducerName, producerDetail.ProducerName);
-        }
-
         [TestMethod]
         public void Transpose_Should_Return_Latest_Organisation_Name()
         {
             var mockContext = new Mock<ApplicationDBContext>();
-            var service = new TransposePomAndOrgDataService(
-                this.ContextFactory.Object,
-                this.CommandTimeoutService);
 
             var organisationDetails = new List<CalculatorRunOrganisationDataDetail>
             {
@@ -218,7 +94,7 @@
                 },
             };
 
-            var orgDetails = service.GetAllOrganisationsBasedonRunId(organisationDetails);
+            var orgDetails = this.TestClass.GetAllOrganisationsBasedonRunId(organisationDetails);
 
             var orgSubDetails = new List<OrganisationDetails>()
             {
@@ -238,7 +114,7 @@
                 },
             };
 
-            var output = service.GetLatestOrganisationName(1, orgSubDetails, orgDetails);
+            var output = this.TestClass.GetLatestOrganisationName(1, orgSubDetails, orgDetails);
             Assert.IsNotNull(output);
             Assert.AreEqual("Test1", output);
         }

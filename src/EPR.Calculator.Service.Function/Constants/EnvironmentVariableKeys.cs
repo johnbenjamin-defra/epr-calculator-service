@@ -55,5 +55,7 @@ namespace EPR.Calculator.Service.Function.Constants
 
         /// <summary>The key for the CommandTimout environment variable.</summary>
         public const string CommandTimeout = "CommandTimeout";
+
+        public const string DbLoadingChunkSize = nameof(DbLoadingChunkSize);
     }
 }

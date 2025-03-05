@@ -2,6 +2,7 @@
 {
     using System;
     using System.Configuration;
+    using EPR.Calculator.Service.Function.Constants;
     using EPR.Calculator.Service.Function.Interface;
     using Microsoft.Extensions.Configuration;
 
@@ -57,5 +58,8 @@
                 return TimeSpan.FromMinutes(timeoutInMinutes);
             }
         }
+
+        public int DbLoadingChunkSize
+            => this.Configuration.GetValue(EnvironmentVariableKeys.DbLoadingChunkSize, 1000);
     }
 }

@@ -9,9 +9,7 @@
     using EPR.Calculator.Service.Function.Data.DataModels;
     using EPR.Calculator.Service.Function.Dtos;
     using EPR.Calculator.Service.Function.Enums;
-    using EPR.Calculator.Service.Function.Services;
     using EPR.Calculator.Service.Function.Interface;
-    using EPR.Calculator.Service.Function.Misc;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -32,18 +30,27 @@
         internal class SubmissionDetails
         {
             public string? SubmissionPeriod { get; set; }
+
             public string? SubmissionPeriodDesc { get; set; }
         }
 
         public TransposePomAndOrgDataService(
-            IDbContextFactory<ApplicationDBContext> context,
-            ICommandTimeoutService commandTimeoutService)
+            ApplicationDBContext context,
+            ICommandTimeoutService commandTimeoutService,
+            IDbLoadingChunkerService<ProducerDetail> producerDetailChunker,
+            IDbLoadingChunkerService<ProducerReportedMaterial> producerReportedMaterialChunker)
         {
-            this.context = context.CreateDbContext();
+            this.context = context;
             this.CommandTimeoutService = commandTimeoutService;
+            this.ProducerDetailChunker = producerDetailChunker;
+            this.ProducerReportedMaterialChunker = producerReportedMaterialChunker;
         }
 
         public ICommandTimeoutService CommandTimeoutService { get; init; }
+
+        private IDbLoadingChunkerService<ProducerDetail> ProducerDetailChunker { get; init; }
+
+        private IDbLoadingChunkerService<ProducerReportedMaterial> ProducerReportedMaterialChunker { get; init; }
 
         public async Task<bool> TransposeBeforeCalcResults(
             [FromBody] CalcResultsRequestDto resultsRequestDto,
@@ -101,7 +108,6 @@
             var newProducerDetails = new List<ProducerDetail>();
             var newProducerReportedMaterials = new List<ProducerReportedMaterial>();
 
-            var result = false;
             var materials = await this.context.Material.ToListAsync(cancellationToken);
 
             var calculatorRun = await context.CalculatorRuns
@@ -219,41 +225,11 @@
                     }
                 }
 
-                result = await SaveNewProducerDetailAndMaterialsAsync(
-                    newProducerDetails, 
-                    newProducerReportedMaterials,
-                    cancellationToken);
+                await this.ProducerDetailChunker.InsertRecords(newProducerDetails);
+                await this.ProducerReportedMaterialChunker.InsertRecords(newProducerReportedMaterials);
             }
-            return result;
-        }
 
-        public async Task<bool> SaveNewProducerDetailAndMaterialsAsync(
-            IEnumerable<ProducerDetail> newProducerDetails,
-            IEnumerable<ProducerReportedMaterial> newProducerReportedMaterials,
-            CancellationToken cancellationToken)
-        {
-            using (var transaction = await this.context.Database.BeginTransactionAsync(cancellationToken))
-            {
-                try
-                {
-                    context.ProducerDetail.AddRange(newProducerDetails);
-                    context.ProducerReportedMaterial.AddRange(newProducerReportedMaterials);
-
-                    // Apply the database changes
-                    await context.SaveChangesAsync(cancellationToken);
-
-                    // Success, commit transaction
-                    await transaction.CommitAsync(cancellationToken);
-                    return true;
-                }
-                catch (Exception)
-                {
-                    // Error, rollback transaction
-                    await transaction.RollbackAsync();
-                    // TO DO: Decide upon the exception later during the complete integration
-                    return false;
-                }
-            }
+            return true;
         }
 
         private static List<OrganisationDetails> GetOrganisationDetailsBySubmissionPeriod(
