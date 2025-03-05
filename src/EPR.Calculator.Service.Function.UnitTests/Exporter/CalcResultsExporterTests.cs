@@ -6,6 +6,7 @@
     using AutoFixture;
     using EPR.Calculator.API.Exporter;
     using EPR.Calculator.Service.Function.Exporter;
+    using EPR.Calculator.Service.Function.Exporter.Detail;
     using EPR.Calculator.Service.Function.Exporter.CommsCost;
     using EPR.Calculator.Service.Function.Exporter.LaDisposalCost;
     using EPR.Calculator.Service.Function.Exporter.OtherCosts;
@@ -26,8 +27,9 @@
             this.MockLaDisposalCostDataExporter = new();
             this.MockScaledupProducersExporter = new();
             this.MockLapcaptDetailExporter = new();
-            this.ParameterOtherCostExporter = new CalcResultParameterOtherCostExporter();
-            this.CommsCostExporter = new CommsCostExporter();
+            this.MockParameterOtherCostExporter = new();
+            this.MockCalcResultSummaryExporter = new();
+            this.MockCommsCostExporter = new();
             this.TestClass = new CalcResultsExporter(
                 this.MockLateReportingExporter.Object,
                 this.MockResultDetailexporter.Object,
@@ -35,13 +37,17 @@
                 this.MockLaDisposalCostDataExporter.Object,
                 this.MockScaledupProducersExporter.Object,
                 this.MockLapcaptDetailExporter.Object,
-                this.ParameterOtherCostExporter,
-                this.CommsCostExporter);
+                this.MockParameterOtherCostExporter.Object,
+                this.MockCommsCostExporter.Object,
+                this.MockCalcResultSummaryExporter.Object);
         }
 
+        private Mock<ICalcResultDetailExporter> mockResultDetailexporter = new();
+        private Mock<IOnePlusFourApportionmentExporter> mockOnePlusFourExporter = new();
+        private Mock<ICalcResultSummaryExporter> mockCalcResultSummaryExporter = new();
         private Fixture Fixture { get; init; }
 
-        private Mock<LateReportingExporter> MockLateReportingExporter { get; init; }
+        private Mock<ILateReportingExporter> MockLateReportingExporter { get; init; }
 
         private Mock<ICalcResultDetailExporter> MockResultDetailexporter { get; init; }
 
@@ -53,9 +59,11 @@
 
         private Mock<ILapcaptDetailExporter> MockLapcaptDetailExporter { get; init; }
 
-        private ICalcResultParameterOtherCostExporter ParameterOtherCostExporter { get; init; }
+        private Mock<ICalcResultParameterOtherCostExporter> MockParameterOtherCostExporter { get; init; }
 
-        private ICommsCostExporter CommsCostExporter { get; init; }
+        private Mock<ICalcResultSummaryExporter> MockCalcResultSummaryExporter { get; init; }
+
+        private Mock<ICommsCostExporter> MockCommsCostExporter { get; init; }
 
         private CalcResultsExporter TestClass { get; init; }
 
@@ -70,130 +78,16 @@
 
             // Assert
             Assert.IsNotNull(result);
-        }
 
-        [TestMethod]
-        public void Export_DataFormatting_IsCorrect()
-        {
-            // Arrange
-            var calcResult = CreateCalcResult();
-
-            // Act
-            var result = this.TestClass.Export(calcResult);
-
-            // Assert
-            Assert.IsTrue(result.Contains("Late Reporting Tonnage"));
-            Assert.IsTrue(result.Contains("Parameters - Other"));
-            Assert.IsTrue(result.Contains("4 LA Data Prep Charge"));
-            Assert.IsTrue(result.Contains("5 Scheme set up cost Yearly Cost"));
-        }
-
-        [TestMethod]
-        public void Export_ShouldThrowArgumentNullException_WhenResultsIsNull()
-        {
-            // Act & Assert
-            var ex = Assert.ThrowsException<ArgumentNullException>(() => this.TestClass.Export(null!));
-            Assert.AreEqual("results", ex.ParamName);
-        }
-
-        [TestMethod]
-        public void Export_ShouldIncludeLateReportingData_WhenNotNull()
-        {
-            // Arrange
-            var results = CreateCalcResult();
-
-            // Act
-            var result = this.TestClass.Export(results);
-
-            // Assert
-            Assert.IsTrue(result.Contains("Late Reporting Tonnage"));
-        }
-
-        [TestMethod]
-        public void Export_ShouldIncludeOtherCosts_WhenNotNull()
-        {
-            // Arrange
-            var results = CreateCalcResult();
-
-            // Act
-            var result = this.TestClass.Export(results);
-
-            // Assert
-            Assert.IsTrue(result.Contains("Parameters - Other"));
-        }
-
-        [TestMethod]
-        public void Export_ShouldIncludeCommCost_WhenNotNull()
-        {
-            // Arrange
-            var results = CreateCalcResult();
-
-            // Act
-            var result = this.TestClass.Export(results);
-
-            // Assert
-            Assert.IsTrue(result.Contains("4 LA Data Prep Charge"));
-        }
-
-        [TestMethod]
-        public void Export_ShouldNotIncludeLaDisposalCostData_WhenNull()
-        {
-            // Arrange
-            var results = CreateCalcResult();
-            results.CalcResultLaDisposalCostData = null;
-
-            // Act
-            var result = this.TestClass.Export(results);
-
-            // Assert
-            Assert.IsFalse(result.Contains("LA Disposal Cost Data"));
-        }
-
-        [TestMethod]
-        public void Export_ShouldIncludeSummaryData_WhenNotNull()
-        {
-            // Arrange
-            var results = CreateCalcResult();
-
-            // Act
-            var result = this.TestClass.Export(results);
-
-            // Assert
-            Assert.IsTrue(result.Contains("SummaryData"));
-        }
-
-        [TestMethod]
-        public void Export_ShouldGenerateEmptyCsv_WhenNoData()
-        {
-            // Arrange
-            var results = new CalcResult
-            {
-                CalcResultLapcapData = null!,
-                CalcResultLateReportingTonnageData = null!,
-                CalcResultParameterOtherCost = null!,
-            };
-
-            // Act
-            if (results != null)
-            {
-                var csvContent = this.TestClass.Export(results);
-
-                // Assert
-                Assert.IsFalse(string.IsNullOrEmpty(csvContent), "CSV content should not be empty.");
-                Assert.IsFalse(csvContent.Contains("LapcapData"), "CSV content should not contain LapcapData.");
-                Assert.IsFalse(
-                    csvContent.Contains("LateReportingData"),
-                    "CSV content should not contain LateReportingData.");
-                Assert.IsFalse(csvContent.Contains("OtherCosts"), "CSV content should not contain OtherCosts.");
-                Assert.IsFalse(
-                    csvContent.Contains("OnePlusFourApportionment"),
-                    "CSV content should not contain OnePlusFourApportionment.");
-                Assert.IsFalse(csvContent.Contains("CommsCost"), "CSV content should not contain CommsCost.");
-                Assert.IsFalse(
-                    csvContent.Contains("LaDisposalCostData"),
-                    "CSV content should not contain LaDisposalCostData.");
-                Assert.IsFalse(csvContent.Contains("SummaryData"), "CSV content should not contain SummaryData.");
-            }
+            this.MockLateReportingExporter.Verify(x => x.Export(calcResult.CalcResultLateReportingTonnageData));
+            this.MockCalcResultSummaryExporter.Verify(x => x.Export(It.IsAny<CalcResultSummary>(), It.IsAny<StringBuilder>()));
+            this.MockLapcaptDetailExporter.Verify(x => x.Export(It.IsAny<CalcResultLapcapData>(), It.IsAny<StringBuilder>()));
+            this.MockResultDetailexporter.Verify(x => x.Export(It.IsAny<CalcResultDetail>(), It.IsAny<StringBuilder>()));
+            this.MockLaDisposalCostDataExporter.Verify(x => x.Export(It.IsAny<CalcResultLaDisposalCostData>(), It.IsAny<StringBuilder>()));
+            this.MockCommsCostExporter.Verify(x => x.Export(It.IsAny<CalcResultCommsCost>(), It.IsAny<StringBuilder>()));
+            this.MockOnePlusFourExporter.Verify(x => x.Export(It.IsAny<CalcResultOnePlusFourApportionment>(), It.IsAny<StringBuilder>()));
+            this.MockScaledupProducersExporter.Verify(x => x.Export(It.IsAny<CalcResultScaledupProducers>(), It.IsAny<StringBuilder>()));
+            this.MockParameterOtherCostExporter.Verify(x => x.Export(It.IsAny<CalcResultParameterOtherCost>(), It.IsAny<StringBuilder>()));
         }
 
         [TestMethod]

@@ -7,13 +7,18 @@
     using EPR.Calculator.Service.Function.Models;
     using Microsoft.Extensions.Primitives;
 
+    public interface ILateReportingExporter
+    {
+        string Export(CalcResultLateReportingTonnage? calcResultLateReportingData);
+    }
+
     /// <summary>
     /// Exports the Late Reporting Tonnage data to a string to be added to the results file.
     /// </summary>
     /// <param name="calcResultLateReportingData">The data to export.</param>
-    public class LateReportingExporter()
+    public class LateReportingExporter : ILateReportingExporter
     {
-        public string PrepareData(CalcResultLateReportingTonnage? calcResultLateReportingData)
+        public string Export(CalcResultLateReportingTonnage? calcResultLateReportingData)
         {
             var csvContent = new StringBuilder();
             if (calcResultLateReportingData is null)

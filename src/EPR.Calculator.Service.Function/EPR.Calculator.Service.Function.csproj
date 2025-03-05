@@ -49,4 +49,7 @@
 			<Value>Constants/*.cs,Models/*.cs,Startup.cs</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Exporter\Summary\" />
+	</ItemGroup>
 </Project>

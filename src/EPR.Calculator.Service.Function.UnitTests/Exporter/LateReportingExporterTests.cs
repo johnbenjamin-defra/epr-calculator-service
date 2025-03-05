@@ -45,7 +45,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Exporter
                 + Environment.NewLine;
 
             // Act
-            var result = this.TestClass.PrepareData(input);
+            var result = this.TestClass.Export(input);
 
             // Assert
             Assert.AreEqual(expectedResult, result);

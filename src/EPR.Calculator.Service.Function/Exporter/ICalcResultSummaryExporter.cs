@@ -3,8 +3,8 @@ using System.Text;
 
 namespace EPR.Calculator.Service.Function.Exporter
 {
-    public interface ICalcResultDetailExporter
+    public interface ICalcResultSummaryExporter
     {
-        void Export(CalcResultDetail calcResultDetail, StringBuilder stringBuilder);
+        void Export(CalcResultSummary resultSummary, StringBuilder csvContent);
     }
 }
