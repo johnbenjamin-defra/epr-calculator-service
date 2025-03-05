@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Azure.Analytics.Synapse.Artifacts" Version="1.0.0-preview.20" />
     <PackageReference Include="Azure.Identity" Version="1.7.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.23.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>

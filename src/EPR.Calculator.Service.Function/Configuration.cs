@@ -82,17 +82,37 @@ namespace EPR.Calculator.Service.Function
         public TimeSpan TransposeTimeout => ParseTimeSpan(
             Environment.GetEnvironmentVariable(EnvironmentVariableKeys.TransposeTimeout));
 
+        /// <summary>
+        /// Gets the database connection string from environment variables.
+        /// </summary>
         public string DbConnectionString => Environment.GetEnvironmentVariable(EnvironmentVariableKeys.DbConnectionString);
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets the blob container name from environment variables.
+        /// </summary>
         public string BlobContainerName => Environment.GetEnvironmentVariable(EnvironmentVariableKeys.BlobContainerName);
- 
+
+        /// <summary>
+        /// Gets the blob connection string from environment variables.
+        /// </summary>
         public string BlobConnectionString => Environment.GetEnvironmentVariable(EnvironmentVariableKeys.BlobConnectionString);
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets the instrumentation key from environment variables.
+        /// </summary>
+        public string InstrumentationKey => Environment.GetEnvironmentVariable(EnvironmentVariableKeys.InstrumentationKey);
+
+        /// <summary>
+        /// Gets the command timeout from environment variables.
+        /// </summary>
         public TimeSpan CommandTimeout => ParseTimeSpan(
             Environment.GetEnvironmentVariable(EnvironmentVariableKeys.CommandTimeout));
 
+        /// <summary>
+        /// Parses a string value to a TimeSpan.
+        /// </summary>
+        /// <param name="value">The string value to parse.</param>
+        /// <returns>A TimeSpan parsed from the string value.</returns>
         private static TimeSpan ParseTimeSpan(string value)
         {
             if (double.TryParse(value, out double timeout))

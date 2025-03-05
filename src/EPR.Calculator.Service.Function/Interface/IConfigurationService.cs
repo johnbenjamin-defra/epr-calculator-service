@@ -35,6 +35,8 @@
 
         string BlobConnectionString { get; }
 
+        string InstrumentationKey { get; }
+
         /// <summary>
         /// Gets the database command timout from the envirionment variables.
         /// </summary>

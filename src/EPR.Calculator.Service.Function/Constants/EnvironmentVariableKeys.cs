@@ -55,5 +55,8 @@ namespace EPR.Calculator.Service.Function.Constants
 
         /// <summary>The key for the CommandTimout environment variable.</summary>
         public const string CommandTimeout = "CommandTimeout";
+
+        /// <summary>The key for the InstrumentationKey environment variable.</summary>
+        public const string InstrumentationKey = "InstrumentationKey";
     }
 }

@@ -1,21 +1,17 @@
 ﻿namespace EPR.Calculator.Service.Function.Services
 {
     using System;
-    using System.Diagnostics;
-    using System.Net;
     using System.Net.Http;
     using System.Text;
     using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
-    using EPR.Calculator.Service.Function.Dtos;
     using EPR.Calculator.Service.Common;
     using EPR.Calculator.Service.Common.AzureSynapse;
-    using EPR.Calculator.Service.Function.Interface;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.Logging;
-    using FluentValidation;
+    using EPR.Calculator.Service.Common.Logging;
+    using EPR.Calculator.Service.Function.Dtos;
     using EPR.Calculator.Service.Function.Enums;
+    using EPR.Calculator.Service.Function.Interface;
 
     /// <summary>
     /// Implementing calculator run service methods.
@@ -24,29 +20,33 @@
     {
         private const string JsonMediaType = "application/json";
         private readonly IAzureSynapseRunner azureSynapseRunner;
-        private readonly ILogger logger;
         private readonly IPipelineClientFactory pipelineClientFactory;
         private readonly ITransposePomAndOrgDataService transposePomAndOrgDataService;
         private readonly IConfigurationService configuration;
         private readonly IPrepareCalcService prepareCalcService;
         private readonly IRpdStatusService statusService;
+        private readonly ICalculatorTelemetryLogger telemetryLogger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculatorRunService"/> class.
         /// </summary>
         /// <param name="azureSynapseRunner">The Azure Synapse runner.</param>
-        /// <param name="logger">The logger instance.</param>
+        /// <param name="telemetryLogger">The logger instance.</param>
         /// <param name="pipelineClientFactory">The pipeline client factory.</param>
+        /// <param name="transposePomAndOrgDataService">The service for transposing POM and organization data.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="prepareCalcService">The prepare calculator service.</param>
+        /// <param name="statusService">The status service.</param>
         public CalculatorRunService(
             IAzureSynapseRunner azureSynapseRunner,
-            ILogger<CalculatorRunService> logger,
+            ICalculatorTelemetryLogger telemetryLogger,
             IPipelineClientFactory pipelineClientFactory,
             ITransposePomAndOrgDataService transposePomAndOrgDataService,
             IConfigurationService configuration,
             IPrepareCalcService prepareCalcService,
             IRpdStatusService statusService)
         {
-            this.logger = logger;
+            this.telemetryLogger = telemetryLogger;
             this.azureSynapseRunner = azureSynapseRunner;
             this.pipelineClientFactory = pipelineClientFactory;
             this.transposePomAndOrgDataService = transposePomAndOrgDataService;
@@ -130,21 +130,27 @@
         /// </returns>
         public async Task<bool> StartProcess(CalculatorRunParameter calculatorRunParameter)
         {
-            this.logger.LogInformation("Process started");
+            this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-StartProcess", "Process started");
             bool.TryParse(this.configuration.ExecuteRPDPipeline, out bool runRpdPipeline);
 
             bool isPomSuccessful = await this.RunPipelines(calculatorRunParameter, runRpdPipeline);
 
             using var client = this.pipelineClientFactory.GetHttpClient(this.configuration.StatusEndpoint);
-            this.logger.LogInformation("HTTP Client: {client}", client);
+            this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-StartProcess", $"HTTP Client: {client}");
 
             bool isSuccess;
             try
             {
                 isSuccess = await this.UpdateStatusAndPrepareResult(calculatorRunParameter, isPomSuccessful, client);
             }
-            catch (TaskCanceledException)
+            catch (TaskCanceledException ex)
             {
+                this.telemetryLogger.LogError(calculatorRunParameter.Id.ToString(), "StartProcess", "Task was canceled", ex);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                this.telemetryLogger.LogError(calculatorRunParameter.Id.ToString(), "StartProcess", "An error occurred", ex);
                 return false;
             }
 
@@ -170,15 +176,14 @@
                     this.configuration.OrgDataPipelineName);
 
                 var isOrgSuccessful = await this.azureSynapseRunner.Process(orgPipelineConfiguration);
-                this.logger.LogInformation("Org status: {Status}", isOrgSuccessful);
-
+                this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-RunPipelines", $"Org status: {isOrgSuccessful}");
                 if (isOrgSuccessful)
                 {
                     var pomPipelineConfiguration = GetAzureSynapseConfiguration(
                         calculatorRunParameter,
                         this.configuration.PomDataPipelineName);
                     isPomSuccessful = await this.azureSynapseRunner.Process(pomPipelineConfiguration);
-                    this.logger.LogInformation("Pom status: {Status}", isPomSuccessful);
+                    this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-RunPipelines", $"Pom status: {isPomSuccessful}");
                 }
             }
             else
@@ -186,7 +191,7 @@
                 isPomSuccessful = true;
             }
 
-            this.logger.LogInformation("Pom status: {Status}", isPomSuccessful);
+            this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-RunPipelines", $"Pom status: {isPomSuccessful}");
             return isPomSuccessful;
         }
 
@@ -205,13 +210,13 @@
 
             if (isPomSuccessful)
             {
-                this.logger.LogInformation("StatusEndPoint: {StatusEndPoint}", this.configuration.StatusEndpoint);
+                this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-UpdateStatusAndPrepareResult", $"StatusEndPoint: {this.configuration.StatusEndpoint}");
                 var statusUpdateResponse = await this.statusService.UpdateRpdStatus(
                         calculatorRunParameter.Id,
                         calculatorRunParameter.User,
                         isPomSuccessful,
                         new CancellationTokenSource(this.configuration.RpdStatusTimeout).Token);
-                this.logger.LogInformation("Status UpdateRpdStatus: {Response}", statusUpdateResponse);
+                this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-UpdateStatusAndPrepareResult", $"Status UpdateRpdStatus: {statusUpdateResponse}");
 
                 if (statusUpdateResponse == RunClassification.RUNNING)
                 {
@@ -220,7 +225,7 @@
                         new CalcResultsRequestDto { RunId = calculatorRunParameter.Id },
                         new CancellationTokenSource(this.configuration.TransposeTimeout).Token);
 
-                    this.logger.LogInformation("transposeResultResponse: {isSuccess}", isTransposeSuccess);
+                    this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-UpdateStatusAndPrepareResult", $"transposeResultResponse: {isTransposeSuccess}");
 
                     if (isTransposeSuccess)
                     {
@@ -228,23 +233,23 @@
                             new CalcResultsRequestDto { RunId = calculatorRunParameter.Id },
                             new CancellationTokenSource(this.configuration.PrepareCalcResultsTimeout).Token);
 
-                        this.logger.LogInformation("prepareCalcResultResponse: {isSuccess}", isSuccess);
+                        this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-UpdateStatusAndPrepareResult", $"prepareCalcResultResponse: {isSuccess}");
                     }
                 }
 
-                this.logger.LogInformation("PrepareCalcResultEndPoint: {PrepareCalcResultEndPoint}", this.configuration.PrepareCalcResultEndPoint);
-                this.logger.LogInformation("CalculatorRunParameter ID: {CalculatorRunParameterId}", calculatorRunParameter.Id);
-                this.logger.LogInformation("GetPrepareCalcResultMessage: {GetPrepareCalcResultMessageId}", GetCalcResultMessage(calculatorRunParameter.Id));
+                this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-UpdateStatusAndPrepareResult", $"PrepareCalcResultEndPoint: {this.configuration.PrepareCalcResultEndPoint}");
+                this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-UpdateStatusAndPrepareResult", $"CalculatorRunParameter ID: {calculatorRunParameter.Id}");
+                this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-UpdateStatusAndPrepareResult", $"GetPrepareCalcResultMessage: {GetCalcResultMessage(calculatorRunParameter.Id)}");
             }
             else
             {
-                this.logger.LogInformation("StatusEndPoint: {StatusEndPoint}", this.configuration.StatusEndpoint);
+                this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-UpdateStatusAndPrepareResult", $"StatusEndPoint: {this.configuration.StatusEndpoint}");
                 var statusUpdateResponse = await this.statusService.UpdateRpdStatus(
                     calculatorRunParameter.Id,
                     calculatorRunParameter.User,
                     isPomSuccessful,
                     new CancellationTokenSource(this.configuration.RpdStatusTimeout).Token);
-                this.logger.LogInformation("Status Response: {Response}", statusUpdateResponse);
+                this.telemetryLogger.LogInformation(calculatorRunParameter.Id.ToString(), "SUNITA-UpdateStatusAndPrepareResult", $"Status Response: {statusUpdateResponse}");
             }
 
             return isSuccess;

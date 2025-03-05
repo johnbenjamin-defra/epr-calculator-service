@@ -17,6 +17,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Services
     using Moq;
     using Moq.Protected;
     using EPR.Calculator.Service.Function.Enums;
+    using EPR.Calculator.Service.Common.Logging;
 
     /// <summary>
     /// Contains unit tests for the CalculatorRunService class.
@@ -31,7 +32,7 @@ namespace EPR.Calculator.Service.Function.UnitTests.Services
         {
             this.Fixture = new Fixture();
             this.AzureSynapseRunner = new Mock<IAzureSynapseRunner>();
-            this.MockLogger = new Mock<ILogger<CalculatorRunService>>();
+            this.MockLogger = new Mock<ICalculatorTelemetryLogger>();
             this.TransposeService = new Mock<ITransposePomAndOrgDataService>();
 
             this.MockStatusUpdateHandler = new Mock<HttpMessageHandler>();
@@ -90,7 +91,8 @@ namespace EPR.Calculator.Service.Function.UnitTests.Services
 
         private Mock<IAzureSynapseRunner> AzureSynapseRunner { get; }
 
-        private Mock<ILogger<CalculatorRunService>> MockLogger { get; }
+        //private Mock<ILogger<CalculatorRunService>> MockLogger { get; }
+        private Mock<ICalculatorTelemetryLogger> MockLogger { get; }
 
         private Fixture Fixture { get; }
 
