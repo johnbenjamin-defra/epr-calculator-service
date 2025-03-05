@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Numerics;
     using System.Threading.Tasks;
     using EPR.Calculator.Service.Function.Constants;
     using EPR.Calculator.Service.Function.Data;
@@ -13,9 +12,6 @@
     using EPR.Calculator.Service.Function.Misc;
     using EPR.Calculator.Service.Function.Models;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Internal;
-    using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-    using static System.Formats.Asn1.AsnWriter;
 
     public class CalcResultScaledupProducersBuilder : ICalcResultScaledupProducersBuilder
     {
@@ -99,7 +95,7 @@
 
             foreach (var row in level2Rows)
             {
-                if (runProducerMaterialDetails.Exists(x => x.ProducerId == row.Key.ProducerId && x.SubsidiaryId != null)
+                if (runProducerMaterialDetails.Exists(x => x.ProducerId == row.Key.ProducerId && x.SubsidiaryId != null && x.SubsidiaryId != string.Empty)
                     &&
                     row.Any())
                 {
@@ -112,7 +108,7 @@
             }
 
             var groupByResult = runProducerMaterialDetails
-                .Where(x => x.SubsidiaryId != null)
+                .Where(x => x.SubsidiaryId != null && x.SubsidiaryId != string.Empty)
                 .GroupBy(x => new { x.ProducerId, x.SubmissionPeriodCode })
                 .Where(x => x.Count() > 1)
                 .ToList();
@@ -209,7 +205,7 @@
                                     SubmissionPeriodCode = spl.SubmissionPeriod,
                                     DaysInSubmissionPeriod = spl.DaysInSubmissionPeriod,
                                     DaysInWholePeriod = spl.DaysInWholePeriod,
-                                    Level = pd.SubsidiaryId != null ? CommonConstants.LevelTwo.ToString() : CommonConstants.LevelOne.ToString(),
+                                    Level = !string.IsNullOrEmpty(pd.SubsidiaryId) ? CommonConstants.LevelTwo.ToString() : CommonConstants.LevelOne.ToString(),
                                 }).Distinct().ToListAsync();
             return result ?? new List<CalcResultScaledupProducer>();
         }
